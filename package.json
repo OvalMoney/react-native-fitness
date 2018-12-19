@@ -1,0 +1,16 @@
+{
+  "name": "react-native-fitness",
+  "version": "0.1.0",
+  "description": "A RN package for both Apple kit and Google Fit",
+  "keywords": [
+    "react-native",
+    "health-kit",
+    "google-fit",
+    "fitness"
+  ],
+  "author": "Oval Money",
+  "license": "MIT",
+  "peerDependencies": {
+    "react-native": ">=0.41.2"
+  }
+}
