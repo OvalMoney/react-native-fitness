@@ -37,9 +37,9 @@
 
 ## Usage
 ```javascript
-import RNFitness from 'react-native-fitness';
+import Fitness from 'react-native-fitness';
 
 // TODO: What to do with the module?
-RNFitness;
+Fitness;
 ```
   
