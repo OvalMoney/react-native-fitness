@@ -1,11 +1,18 @@
 #import <HealthKit/HealthKit.h>
+#import <React/RCTConvert.h>
 #import "RCTFitness.h"
 #import "RCTFitness+Utils.h"
-
-#define ERROR_HEALTH_NOT_AVAILABLE @"HealthKit is not available";
+#import "RCTFitness+Errors.h"
 
 @interface RCTFitness()
 @property (nonatomic, strong) HKHealthStore *healthStore;
+@end
+
+@implementation RCTConvert (Fitness)
+RCT_ENUM_CONVERTER(UIStatusBarAnimation, (@{ @"hkNotAvailable" : @(ErrorHKNotAvailable),
+                                             @"methodNotAvailable" : @(ErrorMethodNotAvailable),
+                                             @"dateNotCorrect" : @(ErrorDateNotCorrect)}),
+                   ErrorHKNotAvailable, integerValue)
 @end
 
 @implementation RCTFitness
@@ -30,28 +37,33 @@ RCT_EXPORT_MODULE(Fitness);
 - (NSDictionary *)constantsToExport{
     return @{
              @"Platform" : @"AppleHealth",
+             @"hkNotAvailable" : @(ErrorHKNotAvailable),
+             @"methodNotAvailable" : @(ErrorMethodNotAvailable),
+             @"dateNotCorrect" : @(ErrorDateNotCorrect),
              };
 }
 
 RCT_REMAP_METHOD(requestPermissions,
                  withRequestResolver:(RCTPromiseResolveBlock)resolve
                  andRequestRejecter:(RCTPromiseRejectBlock)reject){
-
+    
     if ([HKHealthStore isHealthDataAvailable]) {
         NSMutableSet *perms = [NSMutableSet setWithCapacity:1];
         [perms addObject:[HKObjectType quantityTypeForIdentifier: HKQuantityTypeIdentifierDistanceWalkingRunning]];
         [perms addObject:[HKObjectType quantityTypeForIdentifier: HKQuantityTypeIdentifierStepCount]];
         [self.healthStore requestAuthorizationToShareTypes:nil readTypes:perms completion:^(BOOL success, NSError *error) {
             if (!success) {
-                reject(@"no_available", @"HealthKit is not available", error);
+                NSError * error = [RCTFitness createErrorWithCode:ErrorHKNotAvailable andDescription:RCT_ERROR_HK_NOT_AVAILABLE];
+                [RCTFitness handleRejectBlock:reject error:error];
                 return;
             }
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                    resolve(@YES);
-                });
+                resolve(@YES);
+            });
         }];
     }else{
-        reject(@"no_available", @"HealthKit is not available", [NSError new]);
+        NSError * error = [RCTFitness createErrorWithCode:ErrorHKNotAvailable andDescription:RCT_ERROR_HK_NOT_AVAILABLE];
+        [RCTFitness handleRejectBlock:reject error:error];
     }
 }
 
@@ -63,40 +75,43 @@ RCT_REMAP_METHOD(isAuthorized,
             NSMutableSet *perms = [NSMutableSet setWithCapacity:1];
             [perms addObject:[HKObjectType quantityTypeForIdentifier: HKQuantityTypeIdentifierDistanceWalkingRunning]];
             [perms addObject:[HKObjectType quantityTypeForIdentifier: HKQuantityTypeIdentifierStepCount]];
-
+            
             [self.healthStore getRequestStatusForAuthorizationToShareTypes:[NSSet set] readTypes:perms completion:^(HKAuthorizationRequestStatus status, NSError *error) {
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                     resolve(status == HKAuthorizationStatusSharingAuthorized ? @YES : @NO);
                 });
             }];
         }else{
-            reject(@"no_available", @"HealthKit is not available", [NSError new]);
+            NSError * error = [RCTFitness createErrorWithCode:ErrorHKNotAvailable andDescription:RCT_ERROR_HK_NOT_AVAILABLE];
+            [RCTFitness handleRejectBlock:reject error:error];
         }
     }else{
-        reject(@"no_available", @"Method not available", [NSError new]);
+        NSError * error = [RCTFitness createErrorWithCode:ErrorMethodNotAvailable andDescription:RCT_ERROR_METHOD_NOT_AVAILABLE];
+        [RCTFitness handleRejectBlock:reject error:error];
     }
-
+    
 }
 
 RCT_REMAP_METHOD(getSteps,
                  params:(NSDictionary *)params
                  withStepsResolver:(RCTPromiseResolveBlock)resolve
                  andStepsRejecter:(RCTPromiseRejectBlock)reject){
-
+    
     NSString * startDateString = [params objectForKey:@"startDate"];
     NSString * endDateString = [params objectForKey:@"endDate"];
     if(startDateString == nil){
-        reject(@"no_events", @"There were no Start Date", [NSError new]);
+        NSError * error = [RCTFitness createErrorWithCode:ErrorDateNotCorrect andDescription:RCT_ERROR_DATE_NOT_CORRECT];
+        [RCTFitness handleRejectBlock:reject error:error];
         return;
     }
-
+    
     HKQuantityType *type =
     [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount];
-
+    
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *interval = [[NSDateComponents alloc] init];
     interval.day = 1;
-
+    
     NSDateComponents *anchorComponents = [calendar components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear
                                                      fromDate:[NSDate date]];
     anchorComponents.hour = 0;
@@ -108,21 +123,22 @@ RCT_REMAP_METHOD(getSteps,
                                                                                 intervalComponents:interval];
     query.initialResultsHandler =
     ^(HKStatisticsCollectionQuery *query, HKStatisticsCollection *results, NSError *error) {
-
+        
         if (error) {
-             reject(@"no_events", @"There were no events", error);
-            abort();
+            NSError * error = [RCTFitness createErrorWithCode:ErrorNoEvents andDescription:RCT_ERROR_NO_EVENTS];
+            [RCTFitness handleRejectBlock:reject error:error];
+            return;
         }
-
+        
         NSDate * sd = [RCTFitness dateFromISO8601String: startDateString];
-                NSDate * ed = [RCTFitness dateFromISO8601String: endDateString];
-
+        NSDate * ed = [RCTFitness dateFromISO8601String: endDateString];
+        
         NSMutableArray *data = [NSMutableArray arrayWithCapacity:1];
         [results
          enumerateStatisticsFromDate: sd
          toDate:ed
          withBlock:^(HKStatistics *result, BOOL *stop) {
-
+             
              HKQuantity *quantity = result.sumQuantity;
              if (quantity) {
                  NSDate *startDate = result.startDate;
@@ -139,29 +155,30 @@ RCT_REMAP_METHOD(getSteps,
             resolve(data);
         });
     };
-
+    
     [self.healthStore executeQuery:query];
 }
 
 RCT_REMAP_METHOD(getDistance,
-                params:(NSDictionary *)params
+                 params:(NSDictionary *)params
                  withDistanceResolver:(RCTPromiseResolveBlock)resolve
                  andDistanceRejecter:(RCTPromiseRejectBlock)reject){
-
+    
     NSString * startDateString = [params objectForKey:@"startDate"];
     NSString * endDateString = [params objectForKey:@"endDate"];
     if(startDateString == nil){
-        reject(@"no_events", @"There were no Start Date", [NSError new]);
+        NSError * error = [RCTFitness createErrorWithCode:ErrorDateNotCorrect andDescription:RCT_ERROR_DATE_NOT_CORRECT];
+        [RCTFitness handleRejectBlock:reject error:error];
         return;
     }
-
+    
     HKQuantityType *type =
     [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierDistanceWalkingRunning];
-
+    
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *interval = [[NSDateComponents alloc] init];
     interval.day = 1;
-
+    
     NSDateComponents *anchorComponents = [calendar components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear
                                                      fromDate:[NSDate date]];
     anchorComponents.hour = 0;
@@ -173,18 +190,19 @@ RCT_REMAP_METHOD(getDistance,
                                                                                 intervalComponents:interval];
     query.initialResultsHandler =
     ^(HKStatisticsCollectionQuery *query, HKStatisticsCollection *results, NSError *error) {
-
+        
         if (error) {
-            reject(@"no_events", @"There were no events", error);
-            abort();
+            NSError * error = [RCTFitness createErrorWithCode:ErrorNoEvents andDescription:RCT_ERROR_NO_EVENTS];
+            [RCTFitness handleRejectBlock:reject error:error];
+            return;
         }
-
+        
         NSMutableArray *data = [NSMutableArray arrayWithCapacity:1];
         [results
          enumerateStatisticsFromDate: [RCTFitness dateFromISO8601String: startDateString]
          toDate:[RCTFitness dateFromISO8601String: endDateString]
          withBlock:^(HKStatistics *result, BOOL *stop) {
-
+             
              HKQuantity *quantity = result.sumQuantity;
              if (quantity) {
                  NSDictionary *elem = @{
@@ -199,9 +217,10 @@ RCT_REMAP_METHOD(getDistance,
             resolve(data);
         });
     };
-
+    
     [self.healthStore executeQuery:query];
 }
 
 @end
+
 
