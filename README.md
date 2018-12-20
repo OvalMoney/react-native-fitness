@@ -1,5 +1,7 @@
 
 # react-native-fitness
+A React Native module to interact with Apple Healthkit and Google Fit.
+Actually it is possible to fetch only steps and distance on a given period of time, in future other functionalities will be provided.
 
 ## Getting started
 
@@ -36,10 +38,35 @@
 
 
 ## Usage
+
 ```javascript
 import Fitness from 'react-native-fitness';
 
-// TODO: What to do with the module?
-Fitness;
+Fitness.isAuthorized()
+        .then((authorized) => {
+              //Do something
+            })
+            .catch((error) => {
+              //Do something
+            });
 ```
-  
+### Methods
+
+- **isAuthorized**
+Check if permissions are granted or not. It works on Android and iOS >= 12.0, while it will return with an error on other iOS.
+
+- **requestPermissions**
+Ask permission and return if user granted or not(Android), while, due to Apple's privacy model, always true is returned in iOS.
+
+- **getSteps**
+Fetch steps on a given period of time. It requires an Object with `startDate` and `endDate` attributes as string. If startDate is not provided an error will be thrown.
+
+- **getDistance**
+Fetch distance in meters on a given period of time. It requires an Object with `startDate` and `endDate` attributes as string. If startDate is not provided an error will be thrown.
+
+### Attributes
+
+- **Platform**
+Return the used provider.
+
+
