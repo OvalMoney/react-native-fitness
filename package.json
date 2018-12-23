@@ -2,6 +2,7 @@
   "name": "react-native-fitness",
   "version": "0.1.0",
   "description": "A RN package for both Apple kit and Google Fit",
+  "main": "./js/index.js",
   "keywords": [
     "react-native",
     "health-kit",
