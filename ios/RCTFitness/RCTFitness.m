@@ -9,7 +9,7 @@
 @end
 
 @implementation RCTConvert (Fitness)
-RCT_ENUM_CONVERTER(UIStatusBarAnimation, (@{ @"hkNotAvailable" : @(ErrorHKNotAvailable),
+RCT_ENUM_CONVERTER(RCTFitnessError, (@{ @"hkNotAvailable" : @(ErrorHKNotAvailable),
                                              @"methodNotAvailable" : @(ErrorMethodNotAvailable),
                                              @"dateNotCorrect" : @(ErrorDateNotCorrect)}),
                    ErrorHKNotAvailable, integerValue)
