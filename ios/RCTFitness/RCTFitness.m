@@ -129,8 +129,8 @@ RCT_REMAP_METHOD(getSteps,
             return;
         }
         
-        NSDate * sd = [RCTFitness dateFromTimeStamp: startDate /1000];
-        NSDate * ed = [RCTFitness dateFromTimeStamp: endDate / 1000];
+        NSDate * sd = [RCTFitness dateFromTimeStamp: startDate / 1000];
+        NSDate * ed = [RCTFitness dateFromTimeStamp: endDate   / 1000];
         
         NSMutableArray *data = [NSMutableArray arrayWithCapacity:1];
         [results
@@ -195,13 +195,13 @@ RCT_REMAP_METHOD(getDistance,
             return;
         }
         
-        NSDate * sd = [RCTFitness dateFromTimeStamp: startDate /1000];
-        NSDate * ed = [RCTFitness dateFromTimeStamp: endDate / 1000];
+        NSDate * sd = [RCTFitness dateFromTimeStamp: startDate / 1000];
+        NSDate * ed = [RCTFitness dateFromTimeStamp: endDate   / 1000];
         
         NSMutableArray *data = [NSMutableArray arrayWithCapacity:1];
         [results
          enumerateStatisticsFromDate: sd
-         toDate:[RCTFitness dateFromISO8601String: ed]
+         toDate:ed
          withBlock:^(HKStatistics *result, BOOL *stop) {
              
              HKQuantity *quantity = result.sumQuantity;
