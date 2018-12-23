@@ -93,13 +93,12 @@ RCT_REMAP_METHOD(isAuthorized,
 }
 
 RCT_REMAP_METHOD(getSteps,
-                 params:(NSDictionary *)params
+                 withStartDate: (double) startDate
+                 andEndDate: (double) endDate
                  withStepsResolver:(RCTPromiseResolveBlock)resolve
                  andStepsRejecter:(RCTPromiseRejectBlock)reject){
     
-    NSString * startDateString = [params objectForKey:@"startDate"];
-    NSString * endDateString = [params objectForKey:@"endDate"];
-    if(startDateString == nil){
+    if(!startDate){
         NSError * error = [RCTFitness createErrorWithCode:ErrorDateNotCorrect andDescription:RCT_ERROR_DATE_NOT_CORRECT];
         [RCTFitness handleRejectBlock:reject error:error];
         return;
@@ -130,8 +129,8 @@ RCT_REMAP_METHOD(getSteps,
             return;
         }
         
-        NSDate * sd = [RCTFitness dateFromISO8601String: startDateString];
-        NSDate * ed = [RCTFitness dateFromISO8601String: endDateString];
+        NSDate * sd = [RCTFitness dateFromTimeStamp: startDate /1000];
+        NSDate * ed = [RCTFitness dateFromTimeStamp: endDate / 1000];
         
         NSMutableArray *data = [NSMutableArray arrayWithCapacity:1];
         [results
@@ -160,13 +159,12 @@ RCT_REMAP_METHOD(getSteps,
 }
 
 RCT_REMAP_METHOD(getDistance,
-                 params:(NSDictionary *)params
+                 withStartDate: (double) startDate
+                 andEndDate: (double) endDate
                  withDistanceResolver:(RCTPromiseResolveBlock)resolve
                  andDistanceRejecter:(RCTPromiseRejectBlock)reject){
     
-    NSString * startDateString = [params objectForKey:@"startDate"];
-    NSString * endDateString = [params objectForKey:@"endDate"];
-    if(startDateString == nil){
+    if(!startDate){
         NSError * error = [RCTFitness createErrorWithCode:ErrorDateNotCorrect andDescription:RCT_ERROR_DATE_NOT_CORRECT];
         [RCTFitness handleRejectBlock:reject error:error];
         return;
@@ -197,10 +195,13 @@ RCT_REMAP_METHOD(getDistance,
             return;
         }
         
+        NSDate * sd = [RCTFitness dateFromTimeStamp: startDate /1000];
+        NSDate * ed = [RCTFitness dateFromTimeStamp: endDate / 1000];
+        
         NSMutableArray *data = [NSMutableArray arrayWithCapacity:1];
         [results
-         enumerateStatisticsFromDate: [RCTFitness dateFromISO8601String: startDateString]
-         toDate:[RCTFitness dateFromISO8601String: endDateString]
+         enumerateStatisticsFromDate: sd
+         toDate:[RCTFitness dateFromISO8601String: ed]
          withBlock:^(HKStatistics *result, BOOL *stop) {
              
              HKQuantity *quantity = result.sumQuantity;

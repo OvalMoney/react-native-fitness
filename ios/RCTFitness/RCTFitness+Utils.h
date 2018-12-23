@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface RCTFitness(Utils)
 + (NSString *)ISO8601StringFromDate: (NSDate*) date;
-+ (NSDate *)dateFromISO8601String:(NSString *)string;
++ (NSDate *)dateFromTimeStamp: (NSTimeInterval) timestamp;
 @end
 
 NS_ASSUME_NONNULL_END
