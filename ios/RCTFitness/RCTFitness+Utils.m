@@ -6,22 +6,26 @@
 //  Copyright © 2018 Facebook. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import "RCTFitness+Utils.h"
 #include <time.h>
 
 @implementation RCTFitness(Utils)
-
+    
 + (NSString *)ISO8601StringFromDate: (NSDate*) date {
-    struct tm *timeinfo;
-    char buffer[80];
+    // Cache the formatter in thread local storage the first
+    // time it's created and then re-use it every other time.
+    NSMutableDictionary *threadDictionary = [[NSThread currentThread] threadDictionary];
+    NSISO8601DateFormatter *dateFormatter = threadDictionary[cachedISO8601DateFormatterKey];
     
-    time_t rawtime = [date timeIntervalSince1970] - [[NSTimeZone localTimeZone] secondsFromGMT];
-    timeinfo = localtime(&rawtime);
+    if (!dateFormatter) {
+        dateFormatter = [[NSISO8601DateFormatter alloc] init];
+        threadDictionary[cachedISO8601DateFormatterKey] = dateFormatter;
+    }
     
-    strftime(buffer, 80, "%Y-%m-%dT%H:%M:%S%z", timeinfo);
-    
-    return [NSString stringWithCString:buffer encoding:NSUTF8StringEncoding];
+    return [dateFormatter stringFromDate:date];
 }
+
 
 + (NSDate *)dateFromTimeStamp:(NSTimeInterval) timestamp {
     if (!timestamp) {
