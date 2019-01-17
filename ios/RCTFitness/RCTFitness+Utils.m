@@ -15,6 +15,7 @@
 + (NSString *)ISO8601StringFromDate: (NSDate*) date {
     // Cache the formatter in thread local storage the first
     // time it's created and then re-use it every other time.
+    NSString *cachedISO8601DateFormatterKey = @"cachedNSISO8601DateFormatterKey";
     NSMutableDictionary *threadDictionary = [[NSThread currentThread] threadDictionary];
     NSISO8601DateFormatter *dateFormatter = threadDictionary[cachedISO8601DateFormatterKey];
     
