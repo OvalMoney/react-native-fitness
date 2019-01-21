@@ -1,11 +1,18 @@
 
 # react-native-fitness
-A React Native module to interact with Apple Healthkit and Google Fit.
-Actually it is possible to fetch only steps and distance on a given period of time, in future other functionalities will be provided.
+`react-native-fitness` is a library that works on both `iOS` and `Android` with it you can interact with Apple Healthkit and Google Fit.
+Currently the lib provides a set of [API](#API) that you can use to read steps count or distance count for a given period of time.
+
+Note: 
+We're open to receive PRs that contains new features or improvements, so feel free to contribute to this repo.
 
 ## Getting started
 
-`$ npm install react-native-fitness --save`
+`npm install react-native-fitness --save`
+
+or
+
+`yarn add react-native-fitness`
 
 ### Mostly automatic installation
 
@@ -43,26 +50,26 @@ Actually it is possible to fetch only steps and distance on a given period of ti
 import Fitness from 'react-native-fitness';
 
 Fitness.isAuthorized()
-        .then((authorized) => {
-              //Do something
-            })
-            .catch((error) => {
-              //Do something
-            });
+  .then((authorized) => {
+    //Do something
+  })
+  .catch((error) => {
+    //Do something
+  });
 ```
-### Methods
+### API
 
-- **isAuthorized**
-Check if permissions are granted or not. It works on Android and iOS >= 12.0, while it will return with an error on other iOS.
+- **Fitness.isAuthorized()**
+Check if permissions are granted or not. It works on Android and iOS >= 12.0, while it returns an error when iOS < 12.
 
-- **requestPermissions**
+- **Fitness.requestPermissions()**
 Ask permission and return if user granted or not(Android), while, due to Apple's privacy model, always true is returned in iOS.
 
-- **getSteps**
-Fetch steps on a given period of time. It requires an Object with `startDate` and `endDate` attributes as string. If startDate is not provided an error will be thrown.
+- **Fitness.getSteps(dates: { startDate: string, endDate: string })**
+Fetch steps on a given period of time. It requires an `Object` with `startDate` and `endDate` attributes as string. If startDate is not provided an error will be thrown.
 
-- **getDistance**
-Fetch distance in meters on a given period of time. It requires an Object with `startDate` and `endDate` attributes as string. If startDate is not provided an error will be thrown.
+- **Fitness.getDistance(dates: { startDate: string, endDate: string })**
+Fetch distance in meters on a given period of time. It requires an `Object` with `startDate` and `endDate` attributes as string. If startDate is not provided an error will be thrown.
 
 ### Attributes
 
