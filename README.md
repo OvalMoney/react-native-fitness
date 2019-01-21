@@ -43,26 +43,26 @@ Actually it is possible to fetch only steps and distance on a given period of ti
 import Fitness from 'react-native-fitness';
 
 Fitness.isAuthorized()
-        .then((authorized) => {
-              //Do something
-            })
-            .catch((error) => {
-              //Do something
-            });
+  .then((authorized) => {
+    //Do something
+  })
+  .catch((error) => {
+    //Do something
+  });
 ```
 ### Methods
 
-- **isAuthorized**
-Check if permissions are granted or not. It works on Android and iOS >= 12.0, while it will return with an error on other iOS.
+- **isAuthorized()**
+Check if permissions are granted or not. It works on Android and iOS >= 12.0, while it returns an error when iOS < 12.
 
-- **requestPermissions**
+- **requestPermissions()**
 Ask permission and return if user granted or not(Android), while, due to Apple's privacy model, always true is returned in iOS.
 
-- **getSteps**
-Fetch steps on a given period of time. It requires an Object with `startDate` and `endDate` attributes as string. If startDate is not provided an error will be thrown.
+- **getSteps(dates: { startDate: string, endDate: string })**
+Fetch steps on a given period of time. It requires an `Object` with `startDate` and `endDate` attributes as string. If startDate is not provided an error will be thrown.
 
-- **getDistance**
-Fetch distance in meters on a given period of time. It requires an Object with `startDate` and `endDate` attributes as string. If startDate is not provided an error will be thrown.
+- **getDistance(dates: { startDate: string, endDate: string })**
+Fetch distance in meters on a given period of time. It requires an `Object` with `startDate` and `endDate` attributes as string. If startDate is not provided an error will be thrown.
 
 ### Attributes
 
