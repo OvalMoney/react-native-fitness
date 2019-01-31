@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "RCTFitness+Utils.h"
-#include <time.h>
 
 @implementation RCTFitness(Utils)
 
