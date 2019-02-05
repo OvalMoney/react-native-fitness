@@ -6,27 +6,29 @@
 //  Copyright © 2018 Facebook. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import "RCTFitness+Utils.h"
-#include <time.h>
 
 @implementation RCTFitness(Utils)
 
-+ (NSString *)ISO8601StringFromDate: (NSDate*) date {
-    struct tm *timeinfo;
-    char buffer[80];
-    
-    time_t rawtime = [date timeIntervalSince1970] - [[NSTimeZone localTimeZone] secondsFromGMT];
-    timeinfo = localtime(&rawtime);
-    
-    strftime(buffer, 80, "%Y-%m-%dT%H:%M:%S%z", timeinfo);
-    
-    return [NSString stringWithCString:buffer encoding:NSUTF8StringEncoding];
++ (NSISO8601DateFormatter *)dateFormatter {
+    static dispatch_once_t once;
+    static NSISO8601DateFormatter *dateFormatter;
+    dispatch_once(&once, ^{
+        dateFormatter = [[NSISO8601DateFormatter alloc] init];
+    });
+    return dateFormatter;
 }
 
-+ (NSDate *)dateFromTimeStamp:(NSTimeInterval) timestamp {
++ (NSString *)ISO8601StringFromDate:(NSDate *)date {
+    return [[self dateFormatter] stringFromDate:date];
+}
+
++ (NSDate *)dateFromTimeStamp:(NSTimeInterval)timestamp {
     if (!timestamp) {
         return [NSDate date];
     }
+    
     return [NSDate dateWithTimeIntervalSince1970:timestamp];
 }
 
