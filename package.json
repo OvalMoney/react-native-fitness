@@ -10,6 +10,20 @@
     "fitness"
   ],
   "author": "Oval Money",
+  "contributors": [
+    {
+      "name": "Francesco Voto",
+      "email": "fv@ovalmoney.com"
+    },
+    {
+      "name": "Andrea Pacino",
+      "email": "ap@ovalmoney.com"
+    },
+    {
+      "name": "Stefano Cerelli",
+      "email": "stefano.cerelli@ovalmoney.com"
+    }
+  ],
   "license": "MIT",
   "peerDependencies": {
     "react-native": ">=0.41.2"
