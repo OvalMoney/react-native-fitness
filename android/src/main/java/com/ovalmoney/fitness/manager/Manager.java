@@ -91,6 +91,25 @@ public class Manager implements ActivityEventListener {
 
     @Override
     public void onNewIntent(Intent intent) { }
+    
+    public void subscribe(Context context, final Promise promise){
+
+      Fitness.getRecordingClient(context, GoogleSignIn.getLastSignedInAccount(context))
+              .subscribe(DataType.TYPE_ACTIVITY_SAMPLES)
+              .addOnSuccessListener(new OnSuccessListener<Void>() {
+                  @Override
+                  public void onSuccess(Void aVoid) {
+                      promise.resolve(true);
+                  }
+              })
+              .addOnFailureListener(new OnFailureListener() {
+                  @Override
+                  public void onFailure(@NonNull Exception e) {
+                     promise.resolve(false);
+                  }
+              });
+
+            }
 
     public void getSteps(Context context, double startDate, double endDate, final Promise promise){
         DataSource ESTIMATED_STEP_DELTAS = new DataSource.Builder()
