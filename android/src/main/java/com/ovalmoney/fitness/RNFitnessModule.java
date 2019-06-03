@@ -51,13 +51,22 @@ public class RNFitnessModule extends ReactContextBaseJavaModule{
   }
   
     @ReactMethod
-  public void subscribe(Promise promise){
+  public void subscribeToActivity(Promise promise){
     try {
-      manager.subscribe(getCurrentActivity(), promise);
+      manager.subscribeToActivity(getCurrentActivity(), promise);
     }catch(Error e){
       promise.reject(e);
     }
   }
+
+      @ReactMethod
+    public void subscribeToSteps(Promise promise){
+      try {
+        manager.subscribeToSteps(getCurrentActivity(), promise);
+      }catch(Error e){
+        promise.reject(e);
+      }
+    }
 
   @ReactMethod
   public void getSteps(double startDate, double endDate, Promise promise){
