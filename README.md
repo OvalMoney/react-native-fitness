@@ -8,15 +8,15 @@ We're open to receive PRs that contains new features or improvements, so feel fr
 
 ## Getting started
 
-`npm install react-native-fitness --save`
+`npm install @ovalmoney/react-native-fitness --save`
 
 or
 
-`yarn add react-native-fitness`
+`yarn add @ovalmoney/react-native-fitness`
 
 ### Mostly automatic installation
 
-`$ react-native link react-native-fitness`
+`$ react-native link @ovalmoney/react-native-fitness`
 
 ### Manual installation
 
@@ -35,12 +35,12 @@ or
   - Add `new RNFitnessPackage()` to the list returned by the `getPackages()` method
 2. Append the following lines to `android/settings.gradle`:
   	```
-  	include ':react-native-fitness'
-  	project(':react-native-fitness').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-fitness/android')
+  	include ':@ovalmoney_react-native-fitness'
+  	project(':@ovalmoney_react-native-fitness').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-fitness/android')
   	```
 3. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
   	```
-      compile project(':react-native-fitness')
+      compile project(':@ovalmoney_react-native-fitness')
   	```
 
 
