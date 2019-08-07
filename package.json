@@ -1,9 +1,11 @@
 {
-  "name": "react-native-fitness",
+  "name": "@ovalmoney/react-native-fitness",
   "version": "0.1.1",
   "description": "A RN package for both Apple kit and Google Fit",
   "main": "./js/index.js",
   "keywords": [
+    "react",
+    "native",
     "react-native",
     "health-kit",
     "google-fit",
@@ -22,6 +24,10 @@
     {
       "name": "Stefano Cerelli",
       "email": "stefano.cerelli@ovalmoney.com"
+    },
+    {
+      "name": "Alessio Occhipinti",
+      "email": "alessio.occhipinti@ovalmoney.com"
     }
   ],
   "license": "MIT",
@@ -29,6 +35,13 @@
     "url": "https://github.com/OvalMoney/react-native-fitness/issues"
   },
   "homepage": "https://github.com/OvalMoney/react-native-fitness",
+  "files": [
+    "/android",
+    "!/android/build",
+    "/ios",
+    "/js",
+    "/*.podspec"
+  ],
   "peerDependencies": {
     "react-native": ">=0.41.2"
   }
