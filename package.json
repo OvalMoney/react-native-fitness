@@ -1,7 +1,8 @@
 {
   "name": "@ovalmoney/react-native-fitness",
+  "podName": "react-native-fitness",
   "version": "0.2.0",
-  "description": "A RN package for both Apple kit and Google Fit",
+  "description": "A React Native package that gives you access to Apple kit and Google Fit data.",
   "main": "./js/index.js",
   "keywords": [
     "react",
