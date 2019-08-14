@@ -13,7 +13,7 @@ apply plugin: 'com.android.library'
 def DEFAULT_COMPILE_SDK_VERSION = 27
 def DEFAULT_BUILD_TOOLS_VERSION = "27.0.3"
 def DEFAULT_TARGET_SDK_VERSION = 27
-def GOOGLE_LIB_VERSION = "12.0.1"
+def GOOGLE_LIB_VERSION = "17.0.0"
 
 android {
     compileSdkVersion project.hasProperty('compileSdkVersion') ? project.compileSdkVersion : DEFAULT_COMPILE_SDK_VERSION
@@ -41,4 +41,3 @@ dependencies {
     compile "com.google.android.gms:play-services-fitness:$googleVersion"
     compile "com.google.android.gms:play-services-auth:$googleVersion"
 }
-  
