@@ -23,9 +23,9 @@ or
 
 #### iOS
 
-### Pod
-
-You can run `pod install` inside your ios folder to install the package automatically.
+### Pods
+Add the line below to your podfile then run `pod install`
+`pod 'react-native-fitness', :path => '../node_modules/@ovalmoney/react-native-fitness'`
 
 ### Manually
 
