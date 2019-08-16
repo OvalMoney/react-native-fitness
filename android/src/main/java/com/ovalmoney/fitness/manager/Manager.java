@@ -27,6 +27,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.fitness.data.Subscription;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -58,8 +59,10 @@ public class Manager implements ActivityEventListener {
     public boolean isAuthorized(final Activity activity){
         if(isGooglePlayServicesAvailable(activity)) {
             FitnessOptions fitnessOptions = FitnessOptions.builder()
-                    .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
+                    .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_WRITE)
                     .addDataType(DataType.TYPE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)
+                    .addDataType(DataType.TYPE_ACTIVITY_SAMPLES, FitnessOptions.ACCESS_WRITE)
+                    .addDataType(DataType.TYPE_STEP_COUNT_CUMULATIVE, FitnessOptions.ACCESS_WRITE)
                     .build();
             return GoogleSignIn.hasPermissions(GoogleSignIn.getLastSignedInAccount(activity), fitnessOptions);
         }
@@ -69,8 +72,10 @@ public class Manager implements ActivityEventListener {
     public void requestPermissions(@NonNull Activity currentActivity, Promise promise) {
         this.promise = promise;
         FitnessOptions fitnessOptions = FitnessOptions.builder()
-                .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
+                .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_WRITE)
                 .addDataType(DataType.TYPE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)
+                .addDataType(DataType.TYPE_ACTIVITY_SAMPLES, FitnessOptions.ACCESS_WRITE)
+                .addDataType(DataType.TYPE_STEP_COUNT_CUMULATIVE, FitnessOptions.ACCESS_WRITE)
                 .build();
         GoogleSignIn.requestPermissions(
                 currentActivity,
@@ -91,6 +96,46 @@ public class Manager implements ActivityEventListener {
 
     @Override
     public void onNewIntent(Intent intent) { }
+    
+    public void subscribeToActivity(Context context, final Promise promise){
+
+      Fitness.getRecordingClient(context, GoogleSignIn.getLastSignedInAccount(context))
+              .subscribe(DataType.TYPE_ACTIVITY_SAMPLES)
+              .addOnSuccessListener(new OnSuccessListener<Void>() {
+                  @Override
+                  public void onSuccess(Void aVoid) {
+                      promise.resolve(true);
+                  }
+              })
+              .addOnFailureListener(new OnFailureListener() {
+                  @Override
+                  public void onFailure(@NonNull Exception e) {
+                     promise.resolve(false);
+                  }
+              });
+
+            }
+
+        public void subscribeToSteps(Context context, final Promise promise){
+
+
+
+          Fitness.getRecordingClient(context, GoogleSignIn.getLastSignedInAccount(context))
+                  .subscribe(DataType.TYPE_STEP_COUNT_DELTA)
+                  .addOnSuccessListener(new OnSuccessListener<Void>() {
+                      @Override
+                      public void onSuccess(Void aVoid) {
+                          promise.resolve(true);
+                      }
+                  })
+                  .addOnFailureListener(new OnFailureListener() {
+                      @Override
+                      public void onFailure(@NonNull Exception e) {
+                         promise.resolve(false);
+                      }
+                  });
+
+                }
 
     public void getSteps(Context context, double startDate, double endDate, final Promise promise){
         DataSource ESTIMATED_STEP_DELTAS = new DataSource.Builder()
