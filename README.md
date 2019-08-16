@@ -36,6 +36,8 @@ or
 3. In XCode, in the project navigator, select your project. Add `libRNFitness.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
 4. Run your project (`Cmd+R`)<
 
+In order to make it run, it is necessary to turn on `Health Kit` in the `Capabilities`.
+
 #### Android
 1. Get an OAuth 2.0 Client ID as explained at https://developers.google.com/fit/android/get-api-key
 2. Open up `android/app/src/main/java/[...]/MainActivity.java`
