@@ -81,6 +81,14 @@ Fetch steps on a given period of time. It requires an `Object` with `startDate` 
 - **Fitness.getDistance(dates: { startDate: string, endDate: string })**
 Fetch distance in meters on a given period of time. It requires an `Object` with `startDate` and `endDate` attributes as string. If startDate is not provided an error will be thrown.
 
+- **Fitness.subscribeToActivity()**
+Available only on android. Subscribe to all Google Fit activities. It returns a promise with `true` for a successful subscription and `false` otherwise.
+Call this function to get all google fit activites and eliminate the need to have Google Fit installed on the device. 
+
+- **Fitness.subscribeToSteps()**
+Available only on android. Subscribe only to steps from the Google Fit store. It returns a promise with `true` for a successful subscription and `false` otherwise.
+Call this function to get steps and eliminate the need to have Google Fit installed on the device.
+
 ### Attributes
 
 - **Platform**
