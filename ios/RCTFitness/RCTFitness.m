@@ -95,6 +95,7 @@ RCT_REMAP_METHOD(isAuthorized,
 RCT_REMAP_METHOD(getSteps,
                  withStartDate: (double) startDate
                  andEndDate: (double) endDate
+                 andInterval: (NSString *) customInterval
                  withStepsResolver:(RCTPromiseResolveBlock)resolve
                  andStepsRejecter:(RCTPromiseRejectBlock)reject){
     
@@ -109,7 +110,13 @@ RCT_REMAP_METHOD(getSteps,
     
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *interval = [[NSDateComponents alloc] init];
-    interval.day = 1;
+        
+    if(customInterval == @"hour"){
+        interval.hour = 1;
+    }else{
+        interval.day = 1;
+    }
+    
     
     NSDateComponents *anchorComponents = [calendar components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear
                                                      fromDate:[NSDate date]];
@@ -161,6 +168,7 @@ RCT_REMAP_METHOD(getSteps,
 RCT_REMAP_METHOD(getDistance,
                  withStartDate: (double) startDate
                  andEndDate: (double) endDate
+                 andInterval: (NSString *) customInterval
                  withDistanceResolver:(RCTPromiseResolveBlock)resolve
                  andDistanceRejecter:(RCTPromiseRejectBlock)reject){
     
@@ -175,7 +183,12 @@ RCT_REMAP_METHOD(getDistance,
     
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *interval = [[NSDateComponents alloc] init];
-    interval.day = 1;
+        
+    if(customInterval == @"hour"){
+        interval.hour = 1;
+    }else{
+        interval.day = 1;
+    }
     
     NSDateComponents *anchorComponents = [calendar components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear
                                                      fromDate:[NSDate date]];
