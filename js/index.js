@@ -19,6 +19,15 @@ const getDistance = ({ startDate, endDate }) =>
   NativeModules.Fitness.getDistance(parseDate(startDate), parseDate(endDate));
 
 /**
+ * Get native getCalories with parsed Dates
+ * @param startDate
+ * @param endDate
+ * @returns {*}
+ */
+const getCalories = ({ startDate, endDate }) =>
+NativeModules.Fitness.getCalories(parseDate(startDate), parseDate(endDate));
+
+/**
  * Check if valid date and parse it
  * @param date: Date to parse
  */
