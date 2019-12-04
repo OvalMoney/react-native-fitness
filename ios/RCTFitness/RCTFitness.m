@@ -51,6 +51,7 @@ RCT_REMAP_METHOD(requestPermissions,
         NSMutableSet *perms = [NSMutableSet setWithCapacity:1];
         [perms addObject:[HKObjectType quantityTypeForIdentifier: HKQuantityTypeIdentifierDistanceWalkingRunning]];
         [perms addObject:[HKObjectType quantityTypeForIdentifier: HKQuantityTypeIdentifierStepCount]];
+        [perms addObject:[HKObjectType quantityTypeForIdentifier: HKQuantityTypeIdentifierActiveEnergyBurned]];
         [self.healthStore requestAuthorizationToShareTypes:nil readTypes:perms completion:^(BOOL success, NSError *error) {
             if (!success) {
                 NSError * error = [RCTFitness createErrorWithCode:ErrorHKNotAvailable andDescription:RCT_ERROR_HK_NOT_AVAILABLE];
@@ -75,6 +76,7 @@ RCT_REMAP_METHOD(isAuthorized,
             NSMutableSet *perms = [NSMutableSet setWithCapacity:1];
             [perms addObject:[HKObjectType quantityTypeForIdentifier: HKQuantityTypeIdentifierDistanceWalkingRunning]];
             [perms addObject:[HKObjectType quantityTypeForIdentifier: HKQuantityTypeIdentifierStepCount]];
+            [perms addObject:[HKObjectType quantityTypeForIdentifier: HKQuantityTypeIdentifierActiveEnergyBurned]];
             
             [self.healthStore getRequestStatusForAuthorizationToShareTypes:[NSSet set] readTypes:perms completion:^(HKAuthorizationRequestStatus status, NSError *error) {
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -233,7 +235,8 @@ RCT_REMAP_METHOD(getCalories,
         [RCTFitness handleRejectBlock:reject error:error];
         return;
     }
-    
+    HKQuantityType *type =
+    [HKObjectType quantityTypeForIdentifier: HKQuantityTypeIdentifierActiveEnergyBurned];
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *interval = [[NSDateComponents alloc] init];
     interval.day = 1;
@@ -264,7 +267,7 @@ RCT_REMAP_METHOD(getCalories,
          enumerateStatisticsFromDate: sd
          toDate:ed
          withBlock:^(HKStatistics *result, BOOL *stop) {
-             HKQuantity *quantity = result.totalEnergyBurned;
+             HKQuantity *quantity = result.sumQuantity;
              if (quantity) {
                  NSDictionary *elem = @{
                                         @"quantity" : @([quantity doubleValueForUnit:[HKUnit kilocalorieUnit]]),
