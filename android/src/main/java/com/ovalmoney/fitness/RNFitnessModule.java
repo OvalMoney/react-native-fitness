@@ -85,7 +85,7 @@ public class RNFitnessModule extends ReactContextBaseJavaModule{
       promise.reject(e);
     }
   }
-  
+
   @ReactMethod
   public void getCalories(double startDate, double endDate, Promise promise){
     try {
