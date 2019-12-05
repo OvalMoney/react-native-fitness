@@ -147,7 +147,7 @@ public class Manager implements ActivityEventListener {
 
         DataReadRequest readRequest = new DataReadRequest.Builder()
                 .aggregate(ESTIMATED_STEP_DELTAS,    DataType.AGGREGATE_STEP_COUNT_DELTA)
-                .bucketByTime(1, TimeUnit.DAYS)
+                .bucketByTime(1, TimeUnit.HOURS)
                 .setTimeRange((long) startDate, (long) endDate, TimeUnit.MILLISECONDS)
                 .build();
 
@@ -184,7 +184,7 @@ public class Manager implements ActivityEventListener {
     public void getDistance(Context context, double startDate, double endDate, final Promise promise) {
         DataReadRequest readRequest = new DataReadRequest.Builder()
                 .aggregate(DataType.TYPE_DISTANCE_DELTA, DataType.AGGREGATE_DISTANCE_DELTA)
-                .bucketByTime(1, TimeUnit.DAYS)
+                .bucketByTime(1, TimeUnit.HOURS)
                 .setTimeRange((long) startDate, (long) endDate, TimeUnit.MILLISECONDS)
                 .build();
 

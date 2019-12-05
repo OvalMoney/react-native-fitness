@@ -69,7 +69,7 @@ public class RNFitnessModule extends ReactContextBaseJavaModule{
     }
 
   @ReactMethod
-  public void getSteps(double startDate, double endDate, Promise promise){
+  public void getSteps(double startDate, double endDate, String interval, Promise promise){
     try {
       manager.getSteps(getCurrentActivity(), startDate, endDate, promise);
     }catch(Error e){
@@ -78,7 +78,7 @@ public class RNFitnessModule extends ReactContextBaseJavaModule{
   }
 
   @ReactMethod
-  public void getDistance(double startDate, double endDate, Promise promise){
+  public void getDistance(double startDate, double endDate, String interval, Promise promise){
     try {
       manager.getDistance(getCurrentActivity(), startDate, endDate, promise);
     }catch(Error e){
