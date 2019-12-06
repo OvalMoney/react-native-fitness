@@ -75,11 +75,11 @@ Check if permissions are granted or not. It works on Android and iOS >= 12.0, wh
 - **Fitness.requestPermissions()**
 Ask permission and return if user granted or not(Android), while, due to Apple's privacy model, always true is returned in iOS.
 
-- **Fitness.getSteps(dates: { startDate: string, endDate: string })**
-Fetch steps on a given period of time. It requires an `Object` with `startDate` and `endDate` attributes as string. If startDate is not provided an error will be thrown.
+- **Fitness.getSteps(dates: { startDate: string, endDate: string, interval: string })**
+Fetch steps on a given period of time. It requires an `Object` with `startDate` and `endDate` attributes as string. If startDate is not provided an error will be thrown. Set `interval` to decide how detailed the returned data is, set it to `hour` otherwise it defaults to `days`.
 
-- **Fitness.getDistance(dates: { startDate: string, endDate: string })**
-Fetch distance in meters on a given period of time. It requires an `Object` with `startDate` and `endDate` attributes as string. If startDate is not provided an error will be thrown.
+- **Fitness.getDistance(dates: { startDate: string, endDate: string, interval: string })**
+Fetch distance in meters on a given period of time. It requires an `Object` with `startDate` and `endDate` attributes as string. If startDate is not provided an error will be thrown. Set `interval` to decide how detailed the returned data is, set it to `hour` otherwise it defaults to `days`.
 
 - **Fitness.subscribeToActivity()**
 Available only on android. Subscribe to all Google Fit activities. It returns a promise with `true` for a successful subscription and `false` otherwise.
