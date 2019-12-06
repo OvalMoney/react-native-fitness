@@ -3,7 +3,7 @@ package com.ovalmoney.fitness.manager;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.Arguments;
@@ -137,7 +137,7 @@ public class Manager implements ActivityEventListener {
 
                 }
 
-    public void getSteps(Context context, double startDate, double endDate, final Promise promise){
+    public void getSteps(Context context, double startDate, double endDate, String customInterval, final Promise promise){
         DataSource ESTIMATED_STEP_DELTAS = new DataSource.Builder()
                 .setDataType(DataType.TYPE_STEP_COUNT_DELTA)
                 .setType(DataSource.TYPE_DERIVED)
@@ -145,9 +145,16 @@ public class Manager implements ActivityEventListener {
                 .setAppPackageName("com.google.android.gms")
                 .build();
 
+        TimeUnit interval;
+        if(customInterval == "hour"){
+             interval = TimeUnit.HOURS;
+        }else{
+             interval = TimeUnit.DAYS;
+        }
+
         DataReadRequest readRequest = new DataReadRequest.Builder()
                 .aggregate(ESTIMATED_STEP_DELTAS,    DataType.AGGREGATE_STEP_COUNT_DELTA)
-                .bucketByTime(1, TimeUnit.HOURS)
+                .bucketByTime(1, interval)
                 .setTimeRange((long) startDate, (long) endDate, TimeUnit.MILLISECONDS)
                 .build();
 
@@ -181,10 +188,20 @@ public class Manager implements ActivityEventListener {
                 });
     }
 
-    public void getDistance(Context context, double startDate, double endDate, final Promise promise) {
+    public void getDistance(Context context, double startDate, double endDate, String customInterval,final Promise promise) {
+
+
+        TimeUnit interval;
+        if(customInterval == "hour"){
+             interval = TimeUnit.HOURS;
+        }else{
+             interval = TimeUnit.DAYS;
+        }
+
+
         DataReadRequest readRequest = new DataReadRequest.Builder()
                 .aggregate(DataType.TYPE_DISTANCE_DELTA, DataType.AGGREGATE_DISTANCE_DELTA)
-                .bucketByTime(1, TimeUnit.HOURS)
+                .bucketByTime(1, interval)
                 .setTimeRange((long) startDate, (long) endDate, TimeUnit.MILLISECONDS)
                 .build();
 
