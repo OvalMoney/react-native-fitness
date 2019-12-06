@@ -63,6 +63,7 @@ public class Manager implements ActivityEventListener {
                     .addDataType(DataType.TYPE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)
                     .addDataType(DataType.TYPE_ACTIVITY_SAMPLES, FitnessOptions.ACCESS_WRITE)
                     .addDataType(DataType.TYPE_STEP_COUNT_CUMULATIVE, FitnessOptions.ACCESS_WRITE)
+                    .addDataType(DataType.TYPE_CALORIES_EXPENDED, FitnessOptions.ACCESS_WRITE)
                     .build();
             return GoogleSignIn.hasPermissions(GoogleSignIn.getLastSignedInAccount(activity), fitnessOptions);
         }
@@ -76,6 +77,7 @@ public class Manager implements ActivityEventListener {
                 .addDataType(DataType.TYPE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)
                 .addDataType(DataType.TYPE_ACTIVITY_SAMPLES, FitnessOptions.ACCESS_WRITE)
                 .addDataType(DataType.TYPE_STEP_COUNT_CUMULATIVE, FitnessOptions.ACCESS_WRITE)
+                .addDataType(DataType.TYPE_CALORIES_EXPENDED, FitnessOptions.ACCESS_WRITE)
                 .build();
         GoogleSignIn.requestPermissions(
                 currentActivity,
@@ -218,6 +220,43 @@ public class Manager implements ActivityEventListener {
                 });
     }
 
+    public void getCalories(Context context, double startDate, double endDate, final Promise promise) {
+        DataReadRequest readRequest = new DataReadRequest.Builder()
+                .aggregate(DataType.TYPE_CALORIES_EXPENDED, DataType.AGGREGATE_CALORIES_EXPENDED)
+                .bucketByTime(1, TimeUnit.DAYS)
+                .setTimeRange((long) startDate, (long) endDate, TimeUnit.MILLISECONDS)
+                .build();
+
+        Fitness.getHistoryClient(context, GoogleSignIn.getLastSignedInAccount(context))
+                .readData(readRequest)
+                .addOnSuccessListener(new OnSuccessListener<DataReadResponse>() {
+                    @Override
+                    public void onSuccess(DataReadResponse dataReadResponse) {
+                        if (dataReadResponse.getBuckets().size() > 0) {
+                            WritableArray calories = Arguments.createArray();
+                            for (Bucket bucket : dataReadResponse.getBuckets()) {
+                                List<DataSet> dataSets = bucket.getDataSets();
+                                for (DataSet dataSet : dataSets) {
+                                    processDistance(dataSet, distances);
+                                }
+                            }
+                            promise.resolve(distances);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        promise.reject(e);
+                    }
+                })
+                .addOnCompleteListener(new OnCompleteListener<DataReadResponse>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataReadResponse> task) {
+                    }
+                });
+    }
+
     private void processStep(DataSet dataSet, WritableArray map) {
 
         WritableMap stepMap = Arguments.createMap();
@@ -242,6 +281,20 @@ public class Manager implements ActivityEventListener {
                 distanceMap.putString("endDate", dateFormat.format(dp.getEndTime(TimeUnit.MILLISECONDS)));
                 distanceMap.putDouble("quantity", dp.getValue(field).asFloat());
                 map.pushMap(distanceMap);
+            }
+        }
+    }
+
+    private void processCalories(DataSet dataSet, WritableArray map) {
+
+        WritableMap caloryMap = Arguments.createMap();
+
+        for (DataPoint dp : dataSet.getDataPoints()) {
+            for(Field field : dp.getDataType().getFields()) {
+                caloryMap.putString("startDate", dateFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS)));
+                caloryMap.putString("endDate", dateFormat.format(dp.getEndTime(TimeUnit.MILLISECONDS)));
+                caloryMap.putDouble("quantity", dp.getValue(field).asFloat());
+                map.pushMap(caloryMap);
             }
         }
     }
