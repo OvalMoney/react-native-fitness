@@ -44,3 +44,4 @@ buck-out/
 \.buckd/
 *.keystore
       
+.vscode
