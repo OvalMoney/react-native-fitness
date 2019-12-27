@@ -191,15 +191,12 @@ public class Manager implements ActivityEventListener {
     }
 
     public void getDistance(Context context, double startDate, double endDate, String customInterval,final Promise promise) {
-
-
         TimeUnit interval;
         if(customInterval == "hour"){
              interval = TimeUnit.HOURS;
         }else{
              interval = TimeUnit.DAYS;
         }
-
 
         DataReadRequest readRequest = new DataReadRequest.Builder()
                 .aggregate(DataType.TYPE_DISTANCE_DELTA, DataType.AGGREGATE_DISTANCE_DELTA)
@@ -254,10 +251,10 @@ public class Manager implements ActivityEventListener {
                             for (Bucket bucket : dataReadResponse.getBuckets()) {
                                 List<DataSet> dataSets = bucket.getDataSets();
                                 for (DataSet dataSet : dataSets) {
-                                    processDistance(dataSet, distances);
+                                    processDistance(dataSet, calories);
                                 }
                             }
-                            promise.resolve(distances);
+                            promise.resolve(calories);
                         }
                     }
                 })
