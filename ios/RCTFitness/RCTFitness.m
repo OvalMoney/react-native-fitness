@@ -3,6 +3,7 @@
 #import "RCTFitness.h"
 #import "RCTFitness+Utils.h"
 #import "RCTFitness+Errors.h"
+#import "RCTFitness+Permissions.h"
 
 @interface RCTFitness()
 @property (nonatomic, strong) HKHealthStore *healthStore;
@@ -13,6 +14,20 @@ RCT_ENUM_CONVERTER(RCTFitnessError, (@{ @"hkNotAvailable" : @(ErrorHKNotAvailabl
                                              @"methodNotAvailable" : @(ErrorMethodNotAvailable),
                                              @"dateNotCorrect" : @(ErrorDateNotCorrect)}),
                    ErrorHKNotAvailable, integerValue)
+@end
+
+@implementation RCTConvert (Permission)
+RCT_ENUM_CONVERTER(RCTFitnessPermissionKind, (@{ @"Step" : @(STEP),
+                                             @"Distance" : @(DISTANCE),
+                                             @"Calories" : @(CALORIES),
+                                             @"Activity" : @(ACTIVITY)}),
+                   STEP, integerValue)
+@end
+
+@implementation RCTConvert (PermissionAccess)
+RCT_ENUM_CONVERTER(RCTFitnessPermissionAccess, (@{ @"Read" : @(READ),
+                                             @"Write" : @(WRITE)}),
+                    READ, integerValue)
 @end
 
 @implementation RCTFitness
@@ -37,24 +52,56 @@ RCT_EXPORT_MODULE(Fitness);
 - (NSDictionary *)constantsToExport{
     return @{
              @"Platform" : @"AppleHealth",
-             @"hkNotAvailable" : @(ErrorHKNotAvailable),
-             @"methodNotAvailable" : @(ErrorMethodNotAvailable),
-             @"dateNotCorrect" : @(ErrorDateNotCorrect),
-             };
+             @"Error" @{
+                 @"hkNotAvailable" : @(ErrorHKNotAvailable),
+                 @"methodNotAvailable" : @(ErrorMethodNotAvailable),
+                 @"dateNotCorrect" : @(ErrorDateNotCorrect),
+                 @"emptyPermission" : @(ErrorEmptyPermissions),
+             },
+             @"PermissionKind": @{
+                 @"Step": @(STEP),
+                 @"Distance": @(DISTANCE),
+                 @"Calories": @(CALORIES),
+                 @"Activity": @(ACTIVITY),
+             },
+              @"PermissionAccess": @{
+                    @"Read": @(READ),
+                    @"Write": @(WRITE),
+                },
+        };
 }
 
 RCT_REMAP_METHOD(requestPermissions,
-                 withRequestResolver:(RCTPromiseResolveBlock)resolve
-                 andRequestRejecter:(RCTPromiseRejectBlock)reject){
-    
+             withPermissions: (NSArray*) permissions
+             withRequestResolver:(RCTPromiseResolveBlock)resolve
+             andRequestRejecter:(RCTPromiseRejectBlock)reject){
+
     if ([HKHealthStore isHealthDataAvailable]) {
+        if(permissions.count == 0) {
+            NSError * error = [RCTFitness createErrorWithCode:ErrorEmptyPermissions andDescription:RCT_ERROR_EMPTY_PERMISSIONS];
+            [RCTFitness handleRejectBlock:reject error:error];
+            return;
+        }
+        NSMutableSet *sharedPermissions = [NSMutableSet setWithCapacity:1];
         NSMutableSet *perms = [NSMutableSet setWithCapacity:1];
-        [perms addObject:[HKObjectType quantityTypeForIdentifier: HKQuantityTypeIdentifierDistanceWalkingRunning]];
-        [perms addObject:[HKObjectType quantityTypeForIdentifier: HKQuantityTypeIdentifierStepCount]];
-        [perms addObject:[HKObjectType quantityTypeForIdentifier: HKQuantityTypeIdentifierActiveEnergyBurned]];
-        [self.healthStore requestAuthorizationToShareTypes:nil readTypes:perms completion:^(BOOL success, NSError *error) {
+        for (NSDictionary * permission in permissions) {
+            RCTFitnessPermissionKind p = [RCTConvert NSInteger: permission[@"kind"]];
+            RCTFitnessPermissionAccess access = [RCTConvert NSInteger: permission[@"access"]];
+            if(access && access == WRITE){
+                [sharedPermissions addObject:[RCTFitness getQuantityType: p]];
+            } else {
+                [perms addObject:[RCTFitness getQuantityType: p]];
+            }
+        }
+        if(perms.count == 0){
+            NSError * error = [RCTFitness createErrorWithCode:ErrorHKNotAvailable andDescription:RCT_ERROR_HK_NOT_AVAILABLE];
+                   [RCTFitness handleRejectBlock:reject error:error];
+            emptyPermission
+            return;
+        }
+        [self.healthStore requestAuthorizationToShareTypes:sharedPermissions readTypes:perms completion:^(BOOL success, NSError *error) {
             if (!success) {
-                NSError * error = [RCTFitness createErrorWithCode:ErrorHKNotAvailable andDescription:RCT_ERROR_HK_NOT_AVAILABLE];
+                NSError * error = [RCTFitness createErrorWithCode:ErrorEmptyPermissions andDescription:RCT_ERROR_NO_EVENTS];
                 [RCTFitness handleRejectBlock:reject error:error];
                 return;
             }
@@ -69,16 +116,30 @@ RCT_REMAP_METHOD(requestPermissions,
 }
 
 RCT_REMAP_METHOD(isAuthorized,
+                withPermissions: (NSArray*) permissions
                  withAuthorizedResolver:(RCTPromiseResolveBlock)resolve
                  andAuthorizedRejecter:(RCTPromiseRejectBlock)reject){
     if (@available(iOS 12.0, *)) {
         if ([HKHealthStore isHealthDataAvailable]) {
+            NSMutableSet *sharedPermissions = [NSMutableSet setWithCapacity:1];
             NSMutableSet *perms = [NSMutableSet setWithCapacity:1];
-            [perms addObject:[HKObjectType quantityTypeForIdentifier: HKQuantityTypeIdentifierDistanceWalkingRunning]];
-            [perms addObject:[HKObjectType quantityTypeForIdentifier: HKQuantityTypeIdentifierStepCount]];
-            [perms addObject:[HKObjectType quantityTypeForIdentifier: HKQuantityTypeIdentifierActiveEnergyBurned]];
+            for (NSDictionary * permission in permissions) {
+                  RCTFitnessPermissionKind p = [RCTConvert NSInteger: permission[@"kind"]];
+                  RCTFitnessPermissionAccess access = [RCTConvert NSInteger: permission[@"access"]];
+                  if(access && access == WRITE){
+                      [sharedPermissions addObject:[RCTFitness getQuantityType: p]];
+                  } else {
+                      [perms addObject:[RCTFitness getQuantityType: p]];
+                  }
+              }
             
-            [self.healthStore getRequestStatusForAuthorizationToShareTypes:[NSSet set] readTypes:perms completion:^(HKAuthorizationRequestStatus status, NSError *error) {
+            if (!success) {
+                NSError * error = [RCTFitness createErrorWithCode:ErrorEmptyPermissions andDescription:RCT_ERROR_NO_EVENTS];
+                [RCTFitness handleRejectBlock:reject error:error];
+                return;
+            }
+            
+            [self.healthStore getRequestStatusForAuthorizationToShareTypes:sharedPermissions readTypes:perms completion:^(HKAuthorizationRequestStatus status, NSError *error) {
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                     resolve(status == HKAuthorizationStatusSharingAuthorized ? @YES : @NO);
                 });
