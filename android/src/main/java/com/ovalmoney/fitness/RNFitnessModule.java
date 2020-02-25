@@ -143,7 +143,7 @@ public class RNFitnessModule extends ReactContextBaseJavaModule{
     for(int i = 0; i < size; i++) {
       try {
         ReadableMap singlePermission = permissions.getMap(i);
-        requestPermissions.add(new Request(singlePermission.getInt("permission"), singlePermission.getInt("access")));
+        requestPermissions.add(new Request(singlePermission.getInt("kind"), singlePermission.getInt("access")));
       } catch (NullPointerException e) {
         Log.e(TAG, e.getMessage());
       }

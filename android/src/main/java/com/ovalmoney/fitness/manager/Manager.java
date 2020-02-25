@@ -71,20 +71,20 @@ public class Manager implements ActivityEventListener {
         int length = permissions.size();
         for(int i = 0; i < length; i++){
             Request currentRequest = permissions.get(i);
-            switch(currentRequest.permissionType){
+            switch(currentRequest.permissionKind){
                 case STEP:
                     fitnessOptions
-                            .addDataType(DataType.TYPE_STEP_COUNT_DELTA, currentRequest.access)
-                            .addDataType(DataType.TYPE_STEP_COUNT_CUMULATIVE, currentRequest.access);
+                            .addDataType(DataType.TYPE_STEP_COUNT_DELTA, currentRequest.permissionAccess)
+                            .addDataType(DataType.TYPE_STEP_COUNT_CUMULATIVE, currentRequest.permissionAccess);
                     break;
                 case DISTANCE:
-                    fitnessOptions.addDataType(DataType.TYPE_DISTANCE_DELTA, currentRequest.access);
+                    fitnessOptions.addDataType(DataType.TYPE_DISTANCE_DELTA, currentRequest.permissionAccess);
                     break;
                 case CALORIES:
-                    fitnessOptions.addDataType(DataType.TYPE_CALORIES_EXPENDED, currentRequest.access);
+                    fitnessOptions.addDataType(DataType.TYPE_CALORIES_EXPENDED, currentRequest.permissionAccess);
                     break;
                 case ACTIVITY:
-                    fitnessOptions.addDataType(DataType.TYPE_ACTIVITY_SEGMENT, currentRequest.access);
+                    fitnessOptions.addDataType(DataType.TYPE_ACTIVITY_SEGMENT, currentRequest.permissionAccess);
                     break;
                 default:
                     break;
