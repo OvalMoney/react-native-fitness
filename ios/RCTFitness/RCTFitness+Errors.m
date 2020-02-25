@@ -12,6 +12,8 @@ NSString * const RCT_ERROR_HK_NOT_AVAILABLE     = @"Health Kit not available";
 NSString * const RCT_ERROR_METHOD_NOT_AVAILABLE = @"Method not available";
 NSString * const RCT_ERROR_DATE_NOT_CORRECT     = @"Date not correct";
 NSString * const RCT_ERROR_NO_EVENTS            = @"No events found";
+NSString * const RCT_ERROR_EMPTY_PERMISSIONS    = @"At least one permission must be request";
+
 
 static NSString *const RCTErrorDomain = @"com.ovalmoney.fitness";
 
