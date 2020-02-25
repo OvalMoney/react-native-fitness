@@ -27,10 +27,10 @@ public class RNFitnessModule extends ReactContextBaseJavaModule{
   private final static String ERROR_KEY = "Error";
 
   private final static String PERMISSIONS_KEY = "PermissionKind";
-  private final static String STEP_KEY = "STEP";
-  private final static String ACTIVITY_KEY = "ACTIVITY";
-  private final static String CALORIES_KEY = "CALORIES";
-  private final static String DISTANCE_KEY = "DISTANCE";
+  private final static String STEP_KEY = "Step";
+  private final static String ACTIVITY_KEY = "Activity";
+  private final static String CALORIES_KEY = "Calories";
+  private final static String DISTANCE_KEY = "Distance";
 
   private final static String ACCESS_TYPE_KEY = "PermissionAccess";
 
