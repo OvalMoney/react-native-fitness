@@ -143,7 +143,9 @@ public class RNFitnessModule extends ReactContextBaseJavaModule{
     for(int i = 0; i < size; i++) {
       try {
         ReadableMap singlePermission = permissions.getMap(i);
-        requestPermissions.add(new Request(singlePermission.getInt("kind"), singlePermission.getInt("access")));
+        final int permissionKind = singlePermission.getInt("kind");
+        final int permissionAccess = singlePermission.hasKey("access") ? singlePermission.getInt("access") : FitnessOptions.ACCESS_READ;
+        requestPermissions.add(new Request(permissionKind, permissionAccess));
       } catch (NullPointerException e) {
         Log.e(TAG, e.getMessage());
       }
