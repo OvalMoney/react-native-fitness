@@ -24,13 +24,15 @@ public class RNFitnessModule extends ReactContextBaseJavaModule{
   private final static String PLATFORM_KEY = "Platform";
   private final static String PLATFORM = "GoogleFit";
 
-  private final static String PERMISSIONS_KEY = "AvailablePermission";
+  private final static String ERROR_KEY = "Error";
+
+  private final static String PERMISSIONS_KEY = "PermissionKind";
   private final static String STEP_KEY = "STEP";
   private final static String ACTIVITY_KEY = "ACTIVITY";
   private final static String CALORIES_KEY = "CALORIES";
   private final static String DISTANCE_KEY = "DISTANCE";
 
-  private final static String ACCESS_TYPE_KEY = "Access";
+  private final static String ACCESS_TYPE_KEY = "PermissionAccess";
 
   private final static String READ = "READ";
   private final static String WRITE = "WRITE";
@@ -71,6 +73,7 @@ public class RNFitnessModule extends ReactContextBaseJavaModule{
     constants.put(PLATFORM_KEY, PLATFORM);
     constants.put(PERMISSIONS_KEY, PERMISSIONS);
     constants.put(ACCESS_TYPE_KEY, ACCESSES);
+    constants.put(ERROR_KEY, new HashMap<>());
     return constants;
   }
 
