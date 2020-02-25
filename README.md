@@ -59,7 +59,7 @@ In order to make it run, it is necessary to turn on `Health Kit` in the `Capabil
 ```javascript
 import Fitness from '@ovalmoney/react-native-fitness';
 
-Fitness.isAuthorized()
+Fitness.isAuthorized(permissions: { kind: Fitness.PermissionKind.Steps, access: Fitness.PermissionAccess.Write })
   .then((authorized) => {
     //Do something
   })
@@ -69,11 +69,17 @@ Fitness.isAuthorized()
 ```
 ### API
 
-- **Fitness.isAuthorized()**
+- **Fitness.isAuthorized(permissions: [{ kind: int, access: int }])**
 Check if permissions are granted or not. It works on Android and iOS >= 12.0, while it returns an error when iOS < 12.
+It requires an `Array` of `Object` with a mandatory key `kind` and an optional key `access`.
+Possible values for the keys can be found in `PermissionKind` and `PermissionAccess` under `Attributes` section.
+On iOS at least one permissions with `Read` access must be provided, otherwise an `errorEmptyPermissions` will be thrown.
 
-- **Fitness.requestPermissions()**
+- **Fitness.requestPermissions(permissions: [{ kind: int, access: int }])**
 Ask permission and return if user granted or not(Android), while, due to Apple's privacy model, always true is returned in iOS.
+It requires an `Array` of `Object` with a mandatory key `kind` and an optional key `access`.
+Possible values for the keys can be found in `PermissionKind` and `PermissionAccess` under `Attributes` section.
+On iOS at least one permissions with `Read` access must be provided, otherwise an `errorEmptyPermissions` will be thrown.
 
 - **Fitness.getSteps(dates: { startDate: string, endDate: string, interval: string })**
 Fetch steps on a given period of time. It requires an `Object` with `startDate` and `endDate` attributes as string. If startDate is not provided an error will be thrown. Set `interval` to decide how detailed the returned data is, set it to `hour` otherwise it defaults to `days`.
@@ -96,5 +102,28 @@ Call this function to get steps and eliminate the need to have Google Fit instal
 
 - **Platform**
 Return the used provider.
+
+- **PermissionKind**
+Return the information of what kind of Permission can be asked.
+At the moment the list of possible kinds is:
+- ***Step***: to required the access for `Step`
+- ***Distances***: to required the access for `Distances`
+- ***Calories***: to required the access for `Calories`
+
+- **PermissionAccess**
+Return the information of what kind of Access can be asked.
+The list of possible kinds is:
+- ***Read***: to required the access to `Read`
+- ***Write***: to required the access to `Write`
+
+- **Error (iOS only)** 
+Return the list of meaningful errors that can be possible thrown.
+On Android it is an empty object.
+Possible values are:
+- ***hkNotAvailable***: thrown if HealthKit is not available
+- ***methodNotAvailable***: thrown if ```isAuthorized``` is called on iOS < 12.0
+- ***dateNotCorrect***: thrown if received date is not correct
+- ***errorEmptyPermissions***: thrown if no read permissions are provided
+- ***errorNoEvents***: thrown if an error occurs while try to retrieve data
 
 
