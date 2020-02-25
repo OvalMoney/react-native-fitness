@@ -1,11 +1,11 @@
 package com.ovalmoney.fitness.permission;
 
 public class Request {
-    public final @Permission int permissionType;
+    public final @Permission int kind;
     public final int access;
 
-    public Request(@Permission int permissionType, int access) {
-        this.permissionType = permissionType;
+    public Request(@Permission int kind, int access) {
+        this.kind = kind;
         this.access = access;
     }
 }
