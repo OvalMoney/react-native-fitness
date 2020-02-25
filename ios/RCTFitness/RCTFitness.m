@@ -13,6 +13,8 @@
 RCT_ENUM_CONVERTER(RCTFitnessError, (@{ @"hkNotAvailable" : @(ErrorHKNotAvailable),
                                         @"methodNotAvailable" : @(ErrorMethodNotAvailable),
                                         @"dateNotCorrect" : @(ErrorDateNotCorrect)}),
+                                        @"errorNoEvents" : @(ErrorNoEvents),
+                                        @"errorEmptyPermissions" : @(ErrorEmptyPermissions)}),
                    ErrorHKNotAvailable, integerValue)
 @end
 
