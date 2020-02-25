@@ -109,6 +109,7 @@ At the moment the list of possible kinds is:
 - ***Step***: to required the access for `Step`
 - ***Distances***: to required the access for `Distances`
 - ***Calories***: to required the access for `Calories`
+- ***Activity***: to required the access for `Activity` (only Android)
 
 - **PermissionAccess**
 Return the information of what kind of Access can be asked.
