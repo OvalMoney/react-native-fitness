@@ -21,3 +21,5 @@ NS_ASSUME_NONNULL_BEGIN
 @interface RCTFitness(Permissions)
 +(HKObjectType*)getQuantityType:(RCTFitnessPermissionKind)code;
 @end
+
+NS_ASSUME_NONNULL_END
