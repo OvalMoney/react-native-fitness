@@ -163,7 +163,7 @@ RCT_REMAP_METHOD(getSteps,
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *interval = [[NSDateComponents alloc] init];
     
-    if(customInterval == @"hour"){
+    if([customInterval isEqual: @"hour"]){
         interval.hour = 1;
     }else{
         interval.day = 1;
@@ -236,7 +236,7 @@ RCT_REMAP_METHOD(getDistance,
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *interval = [[NSDateComponents alloc] init];
     
-    if(customInterval == @"hour"){
+    if([customInterval  isEqual: @"hour"]){
         interval.hour = 1;
     }else{
         interval.day = 1;
