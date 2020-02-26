@@ -8,17 +8,19 @@
 
 #import "RCTFitness.h"
 
-extern NSString * const RCT_ERROR_HK_NOT_AVAILABLE;
-extern NSString * const RCT_ERROR_METHOD_NOT_AVAILABLE;
-extern NSString * const RCT_ERROR_DATE_NOT_CORRECT;
-extern NSString * const RCT_ERROR_NO_EVENTS;
+extern NSString * _Nonnull const RCT_ERROR_HK_NOT_AVAILABLE;
+extern NSString * _Nonnull const RCT_ERROR_METHOD_NOT_AVAILABLE;
+extern NSString * _Nonnull const RCT_ERROR_DATE_NOT_CORRECT;
+extern NSString * _Nonnull const RCT_ERROR_NO_EVENTS;
+extern NSString * _Nonnull const RCT_ERROR_EMPTY_PERMISSIONS;
 
 typedef NS_ENUM(NSInteger, RCTFitnessError)
 {
     ErrorHKNotAvailable   = -100,
     ErrorMethodNotAvailable,
     ErrorDateNotCorrect,
-    ErrorNoEvents
+    ErrorNoEvents,
+    ErrorEmptyPermissions,
 };
 
 NS_ASSUME_NONNULL_BEGIN

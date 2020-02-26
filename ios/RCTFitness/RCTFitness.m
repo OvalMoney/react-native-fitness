@@ -3,6 +3,7 @@
 #import "RCTFitness.h"
 #import "RCTFitness+Utils.h"
 #import "RCTFitness+Errors.h"
+#import "RCTFitness+Permissions.h"
 
 @interface RCTFitness()
 @property (nonatomic, strong) HKHealthStore *healthStore;
@@ -10,9 +11,25 @@
 
 @implementation RCTConvert (Fitness)
 RCT_ENUM_CONVERTER(RCTFitnessError, (@{ @"hkNotAvailable" : @(ErrorHKNotAvailable),
-                                             @"methodNotAvailable" : @(ErrorMethodNotAvailable),
-                                             @"dateNotCorrect" : @(ErrorDateNotCorrect)}),
+                                        @"methodNotAvailable" : @(ErrorMethodNotAvailable),
+                                        @"dateNotCorrect" : @(ErrorDateNotCorrect)}),
+                                        @"errorNoEvents" : @(ErrorNoEvents),
+                                        @"errorEmptyPermissions" : @(ErrorEmptyPermissions)}),
                    ErrorHKNotAvailable, integerValue)
+@end
+
+@implementation RCTConvert (Permission)
+RCT_ENUM_CONVERTER(RCTFitnessPermissionKind, (@{ @"Step" : @(STEP),
+                                                 @"Distance" : @(DISTANCE),
+                                                 @"Calories" : @(CALORIES),
+                                                 @"Activity" : @(ACTIVITY)}),
+                   STEP, integerValue)
+@end
+
+@implementation RCTConvert (PermissionAccess)
+RCT_ENUM_CONVERTER(RCTFitnessPermissionAccess, (@{ @"Read" : @(READ),
+                                                   @"Write" : @(WRITE)}),
+                   READ, integerValue)
 @end
 
 @implementation RCTFitness
@@ -32,60 +49,93 @@ RCT_ENUM_CONVERTER(RCTFitnessError, (@{ @"hkNotAvailable" : @(ErrorHKNotAvailabl
 
 RCT_EXPORT_MODULE(Fitness);
 
+- (void) handlePermissions:(NSArray*)permissions returnBlock:(void (^)(NSSet* readPerms, NSSet* sharePerms))returnBlock
+{
+    if ([HKHealthStore isHealthDataAvailable]) {
+        NSMutableSet *sharePerms = [NSMutableSet setWithCapacity:1];
+        NSMutableSet *readPerms = [NSMutableSet setWithCapacity:1];
+        for (NSDictionary * permission in permissions) {
+            RCTFitnessPermissionKind p = [RCTConvert NSInteger: permission[@"kind"]];
+            RCTFitnessPermissionAccess access = [RCTConvert NSInteger: permission[@"access"]];
+            if(access && access == WRITE){
+                [sharePerms addObject:[RCTFitness getQuantityType: p]];
+            } else {
+                [readPerms addObject:[RCTFitness getQuantityType: p]];
+            }
+        }
+        if([readPerms count] == 0) {
+            @throw [RCTFitness createErrorWithCode:ErrorEmptyPermissions andDescription: RCT_ERROR_EMPTY_PERMISSIONS];
+        }
+        
+        returnBlock(readPerms, sharePerms);
+    }else{
+        @throw [RCTFitness createErrorWithCode:ErrorHKNotAvailable andDescription:RCT_ERROR_HK_NOT_AVAILABLE];
+    }
+}
+
 #pragma mark - constants export
 
 - (NSDictionary *)constantsToExport{
     return @{
-             @"Platform" : @"AppleHealth",
-             @"hkNotAvailable" : @(ErrorHKNotAvailable),
-             @"methodNotAvailable" : @(ErrorMethodNotAvailable),
-             @"dateNotCorrect" : @(ErrorDateNotCorrect),
-             };
+        @"Platform" : @"AppleHealth",
+        @"Error": @{
+                @"hkNotAvailable" : @(ErrorHKNotAvailable),
+                @"methodNotAvailable" : @(ErrorMethodNotAvailable),
+                @"dateNotCorrect" : @(ErrorDateNotCorrect),
+                @"emptyPermission" : @(ErrorEmptyPermissions),
+        },
+        @"PermissionKind": @{
+                @"Step": @(STEP),
+                @"Distance": @(DISTANCE),
+                @"Calories": @(CALORIES),
+                @"Activity": @(ACTIVITY),
+        },
+        @"PermissionAccess": @{
+                @"Read": @(READ),
+                @"Write": @(WRITE),
+        },
+    };
 }
 
 RCT_REMAP_METHOD(requestPermissions,
+                 withPermissions: (NSArray*) permissions
                  withRequestResolver:(RCTPromiseResolveBlock)resolve
-                 andRequestRejecter:(RCTPromiseRejectBlock)reject){
-    
-    if ([HKHealthStore isHealthDataAvailable]) {
-        NSMutableSet *perms = [NSMutableSet setWithCapacity:1];
-        [perms addObject:[HKObjectType quantityTypeForIdentifier: HKQuantityTypeIdentifierDistanceWalkingRunning]];
-        [perms addObject:[HKObjectType quantityTypeForIdentifier: HKQuantityTypeIdentifierStepCount]];
-        [perms addObject:[HKObjectType quantityTypeForIdentifier: HKQuantityTypeIdentifierActiveEnergyBurned]];
-        [self.healthStore requestAuthorizationToShareTypes:nil readTypes:perms completion:^(BOOL success, NSError *error) {
-            if (!success) {
-                NSError * error = [RCTFitness createErrorWithCode:ErrorHKNotAvailable andDescription:RCT_ERROR_HK_NOT_AVAILABLE];
-                [RCTFitness handleRejectBlock:reject error:error];
-                return;
-            }
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                resolve(@YES);
-            });
+                 andRequestRejecter:(RCTPromiseRejectBlock)reject) {
+    @try{
+        [self handlePermissions:permissions returnBlock: ^(NSSet *readPerms, NSSet* sharePerms){
+            [self.healthStore requestAuthorizationToShareTypes:sharePerms readTypes:readPerms completion:^(BOOL success, NSError *error) {
+                if (!success) {
+                    NSError * error = [RCTFitness createErrorWithCode:ErrorEmptyPermissions andDescription:RCT_ERROR_NO_EVENTS];
+                    [RCTFitness handleRejectBlock:reject error:error];
+                    return;
+                }
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    resolve(@YES);
+                });
+            }];
         }];
-    }else{
-        NSError * error = [RCTFitness createErrorWithCode:ErrorHKNotAvailable andDescription:RCT_ERROR_HK_NOT_AVAILABLE];
-        [RCTFitness handleRejectBlock:reject error:error];
+    }@catch (NSError *error) {
+        [RCTFitness handleRejectBlock:reject error: error];
     }
 }
 
 RCT_REMAP_METHOD(isAuthorized,
+                 withPermissions: (NSArray*) permissions
                  withAuthorizedResolver:(RCTPromiseResolveBlock)resolve
                  andAuthorizedRejecter:(RCTPromiseRejectBlock)reject){
     if (@available(iOS 12.0, *)) {
-        if ([HKHealthStore isHealthDataAvailable]) {
-            NSMutableSet *perms = [NSMutableSet setWithCapacity:1];
-            [perms addObject:[HKObjectType quantityTypeForIdentifier: HKQuantityTypeIdentifierDistanceWalkingRunning]];
-            [perms addObject:[HKObjectType quantityTypeForIdentifier: HKQuantityTypeIdentifierStepCount]];
-            [perms addObject:[HKObjectType quantityTypeForIdentifier: HKQuantityTypeIdentifierActiveEnergyBurned]];
-            
-            [self.healthStore getRequestStatusForAuthorizationToShareTypes:[NSSet set] readTypes:perms completion:^(HKAuthorizationRequestStatus status, NSError *error) {
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                    resolve(status == HKAuthorizationStatusSharingAuthorized ? @YES : @NO);
-                });
+        @try{
+            [self handlePermissions:permissions returnBlock: ^(NSSet *readPerms, NSSet* sharePerms){
+                [self.healthStore getRequestStatusForAuthorizationToShareTypes: sharePerms readTypes: readPerms completion:^(HKAuthorizationRequestStatus status, NSError *error) {
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                        resolve(status == HKAuthorizationStatusSharingAuthorized ? @YES : @NO);
+                    });
+                }];
+                
             }];
-        }else{
-            NSError * error = [RCTFitness createErrorWithCode:ErrorHKNotAvailable andDescription:RCT_ERROR_HK_NOT_AVAILABLE];
-            [RCTFitness handleRejectBlock:reject error:error];
+            
+        }@catch (NSError *error) {
+            [RCTFitness handleRejectBlock:reject error: error];
         }
     }else{
         NSError * error = [RCTFitness createErrorWithCode:ErrorMethodNotAvailable andDescription:RCT_ERROR_METHOD_NOT_AVAILABLE];
@@ -112,7 +162,7 @@ RCT_REMAP_METHOD(getSteps,
     
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *interval = [[NSDateComponents alloc] init];
-        
+    
     if(customInterval == @"hour"){
         interval.hour = 1;
     }else{
@@ -146,19 +196,19 @@ RCT_REMAP_METHOD(getSteps,
          enumerateStatisticsFromDate: sd
          toDate:ed
          withBlock:^(HKStatistics *result, BOOL *stop) {
-             
-             HKQuantity *quantity = result.sumQuantity;
-             if (quantity) {
-                 NSDate *startDate = result.startDate;
-                 NSDate *endDate = result.endDate;
-                 NSDictionary *elem = @{
-                                        @"quantity" : @([quantity doubleValueForUnit:[HKUnit countUnit]]),
-                                        @"startDate" : [RCTFitness ISO8601StringFromDate: startDate],
-                                        @"endDate" : [RCTFitness ISO8601StringFromDate: endDate],
-                                        };
-                 [data addObject:elem];
-             }
-         }];
+            
+            HKQuantity *quantity = result.sumQuantity;
+            if (quantity) {
+                NSDate *startDate = result.startDate;
+                NSDate *endDate = result.endDate;
+                NSDictionary *elem = @{
+                    @"quantity" : @([quantity doubleValueForUnit:[HKUnit countUnit]]),
+                    @"startDate" : [RCTFitness ISO8601StringFromDate: startDate],
+                    @"endDate" : [RCTFitness ISO8601StringFromDate: endDate],
+                };
+                [data addObject:elem];
+            }
+        }];
         dispatch_async(dispatch_get_main_queue(), ^{
             resolve(data);
         });
@@ -185,7 +235,7 @@ RCT_REMAP_METHOD(getDistance,
     
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *interval = [[NSDateComponents alloc] init];
-        
+    
     if(customInterval == @"hour"){
         interval.hour = 1;
     }else{
@@ -218,17 +268,17 @@ RCT_REMAP_METHOD(getDistance,
          enumerateStatisticsFromDate: sd
          toDate:ed
          withBlock:^(HKStatistics *result, BOOL *stop) {
-             
-             HKQuantity *quantity = result.sumQuantity;
-             if (quantity) {
-                 NSDictionary *elem = @{
-                                        @"quantity" : @([quantity doubleValueForUnit:[HKUnit meterUnit]]),
-                                        @"startDate" : [RCTFitness ISO8601StringFromDate: result.startDate],
-                                        @"endDate" : [RCTFitness ISO8601StringFromDate: result.endDate],
-                                        };
-                 [data addObject:elem];
-             }
-         }];
+            
+            HKQuantity *quantity = result.sumQuantity;
+            if (quantity) {
+                NSDictionary *elem = @{
+                    @"quantity" : @([quantity doubleValueForUnit:[HKUnit meterUnit]]),
+                    @"startDate" : [RCTFitness ISO8601StringFromDate: result.startDate],
+                    @"endDate" : [RCTFitness ISO8601StringFromDate: result.endDate],
+                };
+                [data addObject:elem];
+            }
+        }];
         dispatch_async(dispatch_get_main_queue(), ^{
             resolve(data);
         });
@@ -280,16 +330,16 @@ RCT_REMAP_METHOD(getCalories,
          enumerateStatisticsFromDate: sd
          toDate:ed
          withBlock:^(HKStatistics *result, BOOL *stop) {
-             HKQuantity *quantity = result.sumQuantity;
-             if (quantity) {
-                 NSDictionary *elem = @{
-                                        @"quantity" : @([quantity doubleValueForUnit:[HKUnit kilocalorieUnit]]),
-                                        @"startDate" : [RCTFitness ISO8601StringFromDate: result.startDate],
-                                        @"endDate" : [RCTFitness ISO8601StringFromDate: result.endDate],
-                                        };
-                 [data addObject:elem];
-             }
-         }];
+            HKQuantity *quantity = result.sumQuantity;
+            if (quantity) {
+                NSDictionary *elem = @{
+                    @"quantity" : @([quantity doubleValueForUnit:[HKUnit kilocalorieUnit]]),
+                    @"startDate" : [RCTFitness ISO8601StringFromDate: result.startDate],
+                    @"endDate" : [RCTFitness ISO8601StringFromDate: result.endDate],
+                };
+                [data addObject:elem];
+            }
+        }];
         dispatch_async(dispatch_get_main_queue(), ^{
             resolve(data);
         });
@@ -299,5 +349,3 @@ RCT_REMAP_METHOD(getCalories,
 }
 
 @end
-
-

@@ -7,10 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8EE374902403E2520077AAE3 /* RCTFitness+Errors.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EE374882403E2520077AAE3 /* RCTFitness+Errors.m */; };
+		8EE374912403E2520077AAE3 /* RCTFitness+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EE3748C2403E2520077AAE3 /* RCTFitness+Utils.m */; };
+		8EE374922403E2520077AAE3 /* RCTFitness.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EE3748E2403E2520077AAE3 /* RCTFitness.m */; };
+		8EE374932403E2520077AAE3 /* RCTFitness+Permissions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EE3748F2403E2520077AAE3 /* RCTFitness+Permissions.m */; };
 		E04C46F521C19F11002EC431 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E04C46F421C19F11002EC431 /* HealthKit.framework */; };
-		E04C488921C3DA19002EC431 /* RCTFitness+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = E04C488821C3DA18002EC431 /* RCTFitness+Utils.m */; };
-		E05A797F21BED1D400150899 /* RCTFitness.m in Sources */ = {isa = PBXBuildFile; fileRef = E05A797E21BED1D400150899 /* RCTFitness.m */; };
-		E0F801C121CBBA6C007D1242 /* RCTFitness+Errors.m in Sources */ = {isa = PBXBuildFile; fileRef = E0F801C021CBBA6C007D1242 /* RCTFitness+Errors.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -27,13 +28,15 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libRCTFitness.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRCTFitness.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		8EE374882403E2520077AAE3 /* RCTFitness+Errors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RCTFitness+Errors.m"; path = "RCTFitness/RCTFitness+Errors.m"; sourceTree = "<group>"; };
+		8EE374892403E2520077AAE3 /* RCTFitness+Permissions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RCTFitness+Permissions.h"; path = "RCTFitness/RCTFitness+Permissions.h"; sourceTree = "<group>"; };
+		8EE3748A2403E2520077AAE3 /* RCTFitness+Errors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RCTFitness+Errors.h"; path = "RCTFitness/RCTFitness+Errors.h"; sourceTree = "<group>"; };
+		8EE3748B2403E2520077AAE3 /* RCTFitness.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RCTFitness.h; path = RCTFitness/RCTFitness.h; sourceTree = "<group>"; };
+		8EE3748C2403E2520077AAE3 /* RCTFitness+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RCTFitness+Utils.m"; path = "RCTFitness/RCTFitness+Utils.m"; sourceTree = "<group>"; };
+		8EE3748D2403E2520077AAE3 /* RCTFitness+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RCTFitness+Utils.h"; path = "RCTFitness/RCTFitness+Utils.h"; sourceTree = "<group>"; };
+		8EE3748E2403E2520077AAE3 /* RCTFitness.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RCTFitness.m; path = RCTFitness/RCTFitness.m; sourceTree = "<group>"; };
+		8EE3748F2403E2520077AAE3 /* RCTFitness+Permissions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RCTFitness+Permissions.m"; path = "RCTFitness/RCTFitness+Permissions.m"; sourceTree = "<group>"; };
 		E04C46F421C19F11002EC431 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
-		E04C488721C3DA18002EC431 /* RCTFitness+Utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "RCTFitness+Utils.h"; path = "RCTFitness/RCTFitness+Utils.h"; sourceTree = "<group>"; };
-		E04C488821C3DA18002EC431 /* RCTFitness+Utils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "RCTFitness+Utils.m"; path = "RCTFitness/RCTFitness+Utils.m"; sourceTree = "<group>"; };
-		E05A797D21BED1D400150899 /* RCTFitness.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RCTFitness.h; path = RCTFitness/RCTFitness.h; sourceTree = "<group>"; };
-		E05A797E21BED1D400150899 /* RCTFitness.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RCTFitness.m; path = RCTFitness/RCTFitness.m; sourceTree = "<group>"; };
-		E0F801BF21CBBA6C007D1242 /* RCTFitness+Errors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "RCTFitness+Errors.h"; path = "RCTFitness/RCTFitness+Errors.h"; sourceTree = "<group>"; };
-		E0F801C021CBBA6C007D1242 /* RCTFitness+Errors.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "RCTFitness+Errors.m"; path = "RCTFitness/RCTFitness+Errors.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,12 +62,14 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
-				E0F801BF21CBBA6C007D1242 /* RCTFitness+Errors.h */,
-				E0F801C021CBBA6C007D1242 /* RCTFitness+Errors.m */,
-				E04C488721C3DA18002EC431 /* RCTFitness+Utils.h */,
-				E04C488821C3DA18002EC431 /* RCTFitness+Utils.m */,
-				E05A797D21BED1D400150899 /* RCTFitness.h */,
-				E05A797E21BED1D400150899 /* RCTFitness.m */,
+				8EE3748B2403E2520077AAE3 /* RCTFitness.h */,
+				8EE3748E2403E2520077AAE3 /* RCTFitness.m */,
+				8EE3748A2403E2520077AAE3 /* RCTFitness+Errors.h */,
+				8EE374882403E2520077AAE3 /* RCTFitness+Errors.m */,
+				8EE374892403E2520077AAE3 /* RCTFitness+Permissions.h */,
+				8EE3748F2403E2520077AAE3 /* RCTFitness+Permissions.m */,
+				8EE3748D2403E2520077AAE3 /* RCTFitness+Utils.h */,
+				8EE3748C2403E2520077AAE3 /* RCTFitness+Utils.m */,
 				134814211AA4EA7D00B7C361 /* Products */,
 				E04C46F321C19F11002EC431 /* Frameworks */,
 			);
@@ -117,6 +122,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 58B511D21A9E6C8500147676;
@@ -134,9 +140,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E04C488921C3DA19002EC431 /* RCTFitness+Utils.m in Sources */,
-				E0F801C121CBBA6C007D1242 /* RCTFitness+Errors.m in Sources */,
-				E05A797F21BED1D400150899 /* RCTFitness.m in Sources */,
+				8EE374912403E2520077AAE3 /* RCTFitness+Utils.m in Sources */,
+				8EE374902403E2520077AAE3 /* RCTFitness+Errors.m in Sources */,
+				8EE374922403E2520077AAE3 /* RCTFitness.m in Sources */,
+				8EE374932403E2520077AAE3 /* RCTFitness+Permissions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
