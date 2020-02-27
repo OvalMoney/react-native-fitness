@@ -19,5 +19,6 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
         int DISTANCE = 1;
         int ACTIVITY = 2;
         int CALORIES = 3;
+        int HEART_RATE = 3;
     }
 

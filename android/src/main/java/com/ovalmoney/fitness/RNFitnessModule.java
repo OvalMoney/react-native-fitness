@@ -31,6 +31,7 @@ public class RNFitnessModule extends ReactContextBaseJavaModule{
   private final static String ACTIVITY_KEY = "Activity";
   private final static String CALORIES_KEY = "Calories";
   private final static String DISTANCE_KEY = "Distance";
+  private final static String HEART_RATE_KEY = "HeartRate";
 
   private final static String ACCESS_TYPE_KEY = "PermissionAccess";
 
@@ -55,6 +56,7 @@ public class RNFitnessModule extends ReactContextBaseJavaModule{
     PERMISSIONS.put(DISTANCE_KEY, Permission.DISTANCE);
     PERMISSIONS.put(ACTIVITY_KEY, Permission.ACTIVITY);
     PERMISSIONS.put(CALORIES_KEY, Permission.CALORIES);
+    PERMISSIONS.put(HEART_RATE_KEY, Permission.HEART_RATE_KEY);
   }
 
   private void feedAccessesTypeMap(){
