@@ -139,6 +139,15 @@ public class RNFitnessModule extends ReactContextBaseJavaModule{
     }
   }
 
+  @ReactMethod
+  public void getHeartRate(double startDate, double endDate, String interval, Promise promise){
+    try {
+      manager.getHeartRate(getCurrentActivity(), startDate, endDate, interval, promise);
+    }catch(Error e){
+      promise.reject(e);
+    }
+  }
+
   private ArrayList<Request> createRequestFromReactArray(ReadableArray permissions){
     ArrayList<Request> requestPermissions = new ArrayList<>();
     int size = permissions.size();
