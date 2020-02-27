@@ -22,7 +22,8 @@ RCT_ENUM_CONVERTER(RCTFitnessError, (@{ @"hkNotAvailable" : @(ErrorHKNotAvailabl
 RCT_ENUM_CONVERTER(RCTFitnessPermissionKind, (@{ @"Step" : @(STEP),
                                                  @"Distance" : @(DISTANCE),
                                                  @"Calories" : @(CALORIES),
-                                                 @"Activity" : @(ACTIVITY)}),
+                                                 @"Activity" : @(ACTIVITY),
+                                                 @"HeartRate" : @(HEART_RATE)}),
                    STEP, integerValue)
 @end
 
@@ -89,6 +90,7 @@ RCT_EXPORT_MODULE(Fitness);
                 @"Distance": @(DISTANCE),
                 @"Calories": @(CALORIES),
                 @"Activity": @(ACTIVITY),
+                @"HeartRate": @(HEART_RATE),
         },
         @"PermissionAccess": @{
                 @"Read": @(READ),
