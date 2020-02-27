@@ -36,6 +36,20 @@ const getCalories = ({ startDate, endDate }) =>
 NativeModules.Fitness.getCalories(parseDate(startDate), parseDate(endDate));
 
 /**
+ * Get native getHeartRate with parsed Dates
+ * @param startDate
+ * @param endDate
+ * @param interval
+ * @returns {*}
+ */
+const getHeartRate = ({ startDate, endDate, interval = "days" }) =>
+  NativeModules.Fitness.getHeartRate(
+    parseDate(startDate),
+    parseDate(endDate),
+    interval
+  );
+
+/**
  * Check if valid date and parse it
  * @param date: Date to parse
  */
