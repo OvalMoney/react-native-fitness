@@ -379,7 +379,7 @@ RCT_REMAP_METHOD(getHeartRate,
     NSDate *anchorDate = [calendar dateFromComponents:anchorComponents];
     HKStatisticsCollectionQuery *query = [[HKStatisticsCollectionQuery alloc] initWithQuantityType:type
                                                                            quantitySamplePredicate:nil
-                                                                                           options:HKStatisticsOptionCumulativeSum
+                                                                                           options:HKStatisticsOptionDiscreteAverage
                                                                                         anchorDate:anchorDate
                                                                                 intervalComponents:interval];
     query.initialResultsHandler =
@@ -399,10 +399,10 @@ RCT_REMAP_METHOD(getHeartRate,
          enumerateStatisticsFromDate: sd
          toDate:ed
          withBlock:^(HKStatistics *result, BOOL *stop) {
-            HKQuantity *quantity = result.sumQuantity;
+            HKQuantity *quantity = result.averageQuantity;
             if (quantity) {
                 NSDictionary *elem = @{
-                    @"quantity" : @([quantity doubleValueForUnit:[HKUnit countUnit]]),
+                    @"quantity" : @([quantity doubleValueForUnit:[[HKUnit countUnit] unitDividedByUnit:HKUnit.minuteUnit]]),
                     @"startDate" : [RCTFitness ISO8601StringFromDate: result.startDate],
                     @"endDate" : [RCTFitness ISO8601StringFromDate: result.endDate],
                 };
