@@ -70,4 +70,5 @@ export default {
   getSteps,
   getDistance,
   getCalories,
+  getHeartRate,
 };
