@@ -46,6 +46,7 @@ import static com.ovalmoney.fitness.permission.Permission.ACTIVITY;
 import static com.ovalmoney.fitness.permission.Permission.CALORIES;
 import static com.ovalmoney.fitness.permission.Permission.DISTANCE;
 import static com.ovalmoney.fitness.permission.Permission.STEP;
+import static com.ovalmoney.fitness.permission.Permission.HEART_RATE;
 
 public class Manager implements ActivityEventListener {
 
@@ -320,7 +321,7 @@ public class Manager implements ActivityEventListener {
         }
 
         DataReadRequest readRequest = new DataReadRequest.Builder()
-                .aggregate(DataType.TYPE_HEART_RATE_BPM)
+                .aggregate(DataType.TYPE_HEART_RATE_BPM, DataType.AGGREGATE_HEART_RATE_SUMMARY)
                 .bucketByTime(1, interval)
                 .setTimeRange((long) startDate, (long) endDate, TimeUnit.MILLISECONDS)
                 .build();

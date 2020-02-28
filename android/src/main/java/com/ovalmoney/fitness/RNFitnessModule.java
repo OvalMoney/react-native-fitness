@@ -56,7 +56,7 @@ public class RNFitnessModule extends ReactContextBaseJavaModule{
     PERMISSIONS.put(DISTANCE_KEY, Permission.DISTANCE);
     PERMISSIONS.put(ACTIVITY_KEY, Permission.ACTIVITY);
     PERMISSIONS.put(CALORIES_KEY, Permission.CALORIES);
-    PERMISSIONS.put(HEART_RATE_KEY, Permission.HEART_RATE_KEY);
+    PERMISSIONS.put(HEART_RATE_KEY, Permission.HEART_RATE);
   }
 
   private void feedAccessesTypeMap(){
@@ -157,7 +157,7 @@ public class RNFitnessModule extends ReactContextBaseJavaModule{
         final int permissionKind = singlePermission.getInt("kind");
         final int permissionAccess = singlePermission.hasKey("access") ? singlePermission.getInt("access") : FitnessOptions.ACCESS_READ;
         requestPermissions.add(new Request(permissionKind, permissionAccess));
-      } catch (NullPointerException | NoSuchKeyException e) {
+      } catch (NullPointerException e) {
         Log.e(TAG, e.getMessage());
       }
     }
