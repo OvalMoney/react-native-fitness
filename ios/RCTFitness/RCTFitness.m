@@ -361,8 +361,8 @@ RCT_REMAP_METHOD(getHeartRate,
                  withStartDate: (double) startDate
                  andEndDate: (double) endDate
                  andInterval: (NSString *) customInterval
-                 withCaloriesResolver:(RCTPromiseResolveBlock)resolve
-                 andCaloriesRejecter:(RCTPromiseRejectBlock)reject){
+                 withHeartRateResolver:(RCTPromiseResolveBlock)resolve
+                 andHeartRateRejecter:(RCTPromiseRejectBlock)reject){
     
     if(!startDate){
         NSError * error = [RCTFitness createErrorWithCode:ErrorDateNotCorrect andDescription:RCT_ERROR_DATE_NOT_CORRECT];
