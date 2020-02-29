@@ -231,7 +231,7 @@ public class Manager implements ActivityEventListener {
                 });
     }
 
-    public void getDistance(Context context, double startDate, double endDate, String customInterval,final Promise promise) {
+    public void getDistance(Context context, double startDate, double endDate, String customInterval, final Promise promise) {
         TimeUnit interval;
         if(customInterval == "hour"){
             interval = TimeUnit.HOURS;
@@ -275,10 +275,16 @@ public class Manager implements ActivityEventListener {
                 });
     }
 
-    public void getCalories(Context context, double startDate, double endDate, final Promise promise) {
+    public void getCalories(Context context, double startDate, double endDate, String customInterval, final Promise promise) {
+        TimeUnit interval;
+        if(customInterval == "hour"){
+            interval = TimeUnit.HOURS;
+        }else{
+            interval = TimeUnit.DAYS;
+        }
         DataReadRequest readRequest = new DataReadRequest.Builder()
                 .aggregate(DataType.TYPE_CALORIES_EXPENDED, DataType.AGGREGATE_CALORIES_EXPENDED)
-                .bucketByTime(1, TimeUnit.DAYS)
+                .bucketByTime(1, interval)
                 .setTimeRange((long) startDate, (long) endDate, TimeUnit.MILLISECONDS)
                 .build();
 

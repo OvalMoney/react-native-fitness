@@ -292,6 +292,7 @@ RCT_REMAP_METHOD(getDistance,
 RCT_REMAP_METHOD(getCalories,
                  withStartDate: (double) startDate
                  andEndDate: (double) endDate
+                 andInterval: (NSString *) customInterval
                  withCaloriesResolver:(RCTPromiseResolveBlock)resolve
                  andCaloriesRejecter:(RCTPromiseRejectBlock)reject){
     
@@ -300,11 +301,17 @@ RCT_REMAP_METHOD(getCalories,
         [RCTFitness handleRejectBlock:reject error:error];
         return;
     }
+
     HKQuantityType *type =
     [HKObjectType quantityTypeForIdentifier: HKQuantityTypeIdentifierActiveEnergyBurned];
     NSCalendar *calendar = [NSCalendar currentCalendar];
+    
     NSDateComponents *interval = [[NSDateComponents alloc] init];
-    interval.day = 1;
+    if([customInterval  isEqual: @"hour"]){
+        interval.hour = 1;
+    }else{
+        interval.day = 1;
+    }
     
     NSDateComponents *anchorComponents = [calendar components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear
                                                      fromDate:[NSDate date]];
