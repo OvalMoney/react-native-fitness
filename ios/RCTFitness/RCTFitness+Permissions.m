@@ -21,6 +21,8 @@
                 return nil;
         case CALORIES:
                 return [HKObjectType quantityTypeForIdentifier: HKQuantityTypeIdentifierActiveEnergyBurned];
+        case HEART_RATE:
+                return [HKObjectType quantityTypeForIdentifier: HKQuantityTypeIdentifierHeartRate];
         default:
             return nil;
     }

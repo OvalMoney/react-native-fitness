@@ -22,7 +22,8 @@ RCT_ENUM_CONVERTER(RCTFitnessError, (@{ @"hkNotAvailable" : @(ErrorHKNotAvailabl
 RCT_ENUM_CONVERTER(RCTFitnessPermissionKind, (@{ @"Step" : @(STEP),
                                                  @"Distance" : @(DISTANCE),
                                                  @"Calories" : @(CALORIES),
-                                                 @"Activity" : @(ACTIVITY)}),
+                                                 @"Activity" : @(ACTIVITY),
+                                                 @"HeartRate" : @(HEART_RATE)}),
                    STEP, integerValue)
 @end
 
@@ -89,6 +90,7 @@ RCT_EXPORT_MODULE(Fitness);
                 @"Distance": @(DISTANCE),
                 @"Calories": @(CALORIES),
                 @"Activity": @(ACTIVITY),
+                @"HeartRate": @(HEART_RATE),
         },
         @"PermissionAccess": @{
                 @"Read": @(READ),
@@ -347,5 +349,73 @@ RCT_REMAP_METHOD(getCalories,
     
     [self.healthStore executeQuery:query];
 }
+
+RCT_REMAP_METHOD(getHeartRate,
+                 withStartDate: (double) startDate
+                 andEndDate: (double) endDate
+                 andInterval: (NSString *) customInterval
+                 withCaloriesResolver:(RCTPromiseResolveBlock)resolve
+                 andCaloriesRejecter:(RCTPromiseRejectBlock)reject){
+    
+    if(!startDate){
+        NSError * error = [RCTFitness createErrorWithCode:ErrorDateNotCorrect andDescription:RCT_ERROR_DATE_NOT_CORRECT];
+        [RCTFitness handleRejectBlock:reject error:error];
+        return;
+    }
+    HKQuantityType *type =
+    [HKObjectType quantityTypeForIdentifier: HKQuantityTypeIdentifierHeartRate];
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+   
+    NSDateComponents *interval = [[NSDateComponents alloc] init];
+        if([customInterval  isEqual: @"hour"]){
+        interval.hour = 1;
+    }else{
+        interval.day = 1;
+    }
+    
+    NSDateComponents *anchorComponents = [calendar components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear
+                                                     fromDate:[NSDate date]];
+    anchorComponents.hour = 0;
+    NSDate *anchorDate = [calendar dateFromComponents:anchorComponents];
+    HKStatisticsCollectionQuery *query = [[HKStatisticsCollectionQuery alloc] initWithQuantityType:type
+                                                                           quantitySamplePredicate:nil
+                                                                                           options:HKStatisticsOptionDiscreteAverage
+                                                                                        anchorDate:anchorDate
+                                                                                intervalComponents:interval];
+    query.initialResultsHandler =
+    ^(HKStatisticsCollectionQuery *query, HKStatisticsCollection *results, NSError *error) {
+        
+        if (error) {
+            NSError * error = [RCTFitness createErrorWithCode:ErrorNoEvents andDescription:RCT_ERROR_NO_EVENTS];
+            [RCTFitness handleRejectBlock:reject error:error];
+            return;
+        }
+        
+        NSDate * sd = [RCTFitness dateFromTimeStamp: startDate / 1000];
+        NSDate * ed = [RCTFitness dateFromTimeStamp: endDate   / 1000];
+        
+        NSMutableArray *data = [NSMutableArray arrayWithCapacity:1];
+        [results
+         enumerateStatisticsFromDate: sd
+         toDate:ed
+         withBlock:^(HKStatistics *result, BOOL *stop) {
+            HKQuantity *quantity = result.averageQuantity;
+            if (quantity) {
+                NSDictionary *elem = @{
+                    @"quantity" : @([quantity doubleValueForUnit:[[HKUnit countUnit] unitDividedByUnit:HKUnit.minuteUnit]]),
+                    @"startDate" : [RCTFitness ISO8601StringFromDate: result.startDate],
+                    @"endDate" : [RCTFitness ISO8601StringFromDate: result.endDate],
+                };
+                [data addObject:elem];
+            }
+        }];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            resolve(data);
+        });
+    };
+    
+    [self.healthStore executeQuery:query];
+}
+
 
 @end
