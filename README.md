@@ -103,10 +103,10 @@ Call this function to get steps and eliminate the need to have Google Fit instal
 
 ### Attributes
 
-- **Platform**
+#### Platform
 Return the used provider.
 
-- **PermissionKind**
+#### PermissionKind
 Return the information of what kind of Permission can be asked.
 At the moment the list of possible kinds is:
  - ***Step***: to required the access for `Step`
@@ -115,13 +115,13 @@ At the moment the list of possible kinds is:
  - ***HeartRate***: to required the access for `Heart rate`
  - ***Activity***: to required the access for `Activity` (only Android)
 
-- **PermissionAccess**
+#### PermissionAccess
 Return the information of what kind of Access can be asked.
 The list of possible kinds is:
  - ***Read***: to required the access to `Read`
  - ***Write***: to required the access to `Write`
 
-- **Error (iOS only)** 
+#### Error (iOS only)
 Return the list of meaningful errors that can be possible thrown.
 On Android it is an empty object.
 Possible values are:
