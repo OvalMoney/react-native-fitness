@@ -109,26 +109,26 @@ Return the used provider.
 - **PermissionKind**
 Return the information of what kind of Permission can be asked.
 At the moment the list of possible kinds is:
-• ***Step***: to required the access for `Step`
-• ***Distances***: to required the access for `Distances`
-• ***Calories***: to required the access for `Calories`
-• ***HeartRate***: to required the access for `Heart rate`
-• ***Activity***: to required the access for `Activity` (only Android)
+ - ***Step***: to required the access for `Step`
+ - ***Distances***: to required the access for `Distances`
+ - ***Calories***: to required the access for `Calories`
+ - ***HeartRate***: to required the access for `Heart rate`
+ - ***Activity***: to required the access for `Activity` (only Android)
 
 - **PermissionAccess**
 Return the information of what kind of Access can be asked.
 The list of possible kinds is:
-• ***Read***: to required the access to `Read`
-• ***Write***: to required the access to `Write`
+ - ***Read***: to required the access to `Read`
+ - ***Write***: to required the access to `Write`
 
 - **Error (iOS only)** 
 Return the list of meaningful errors that can be possible thrown.
 On Android it is an empty object.
 Possible values are:
-• ***hkNotAvailable***: thrown if HealthKit is not available
-• ***methodNotAvailable***: thrown if ```isAuthorized``` is called on iOS < 12.0
-• ***dateNotCorrect***: thrown if received date is not correct
-• ***errorEmptyPermissions***: thrown if no read permissions are provided
-• ***errorNoEvents***: thrown if an error occurs while try to retrieve data
+ - ***hkNotAvailable***: thrown if HealthKit is not available
+ - ***methodNotAvailable***: thrown if ```isAuthorized``` is called on iOS < 12.0
+ -  ***dateNotCorrect***: thrown if received date is not correct
+ - ***errorEmptyPermissions***: thrown if no read permissions are provided
+ - ***errorNoEvents***: thrown if an error occurs while try to retrieve data
 
 
