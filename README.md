@@ -93,6 +93,9 @@ Fetch calories burnt in kilocalories on a given period of time. It requires an `
 - **Fitness.getHeartRate(dates: { startDate: string, endDate: string, interval: string })**
 Fetch heart rate bpm on a given period of time. It requires an `Object` with `startDate` and `endDate` attributes as string. If startDate is not provided an error will be thrown. Set `interval` to decide how detailed the returned data is, set it to `hour` otherwise it defaults to `days`.
 
+- **Fitness.getSleepAnalysis(dates: { startDate: string, endDate: string })**
+Fetch sleep analysis data on a given period of time. It requires an `Object` with `startDate` and `endDate` attributes as string. If startDate is not provided an error will be thrown.
+
 - **Fitness.subscribeToActivity()**
 Available only on android. Subscribe to all Google Fit activities. It returns a promise with `true` for a successful subscription and `false` otherwise.
 Call this function to get all google fit activites and eliminate the need to have Google Fit installed on the device. 
@@ -114,6 +117,8 @@ At the moment the list of possible kinds is:
  - ***Calories***: to required the access for `Calories`
  - ***HeartRate***: to required the access for `Heart rate`
  - ***Activity***: to required the access for `Activity` (only Android)
+ - ***SleepAnalysis***: to required the access for `Sleep Analysis` (only iOS)
+
 
 #### PermissionAccess
 Return the information of what kind of Access can be asked.
