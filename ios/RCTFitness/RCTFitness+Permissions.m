@@ -23,6 +23,8 @@
                 return [HKObjectType quantityTypeForIdentifier: HKQuantityTypeIdentifierActiveEnergyBurned];
         case HEART_RATE:
                 return [HKObjectType quantityTypeForIdentifier: HKQuantityTypeIdentifierHeartRate];
+        case SLEEP_ANALYSIS: 
+                return [HKObjectType quantityTypeForIdentifier: HKCategoryTypeIdentifierSleepAnalysis];
         default:
             return nil;
     }
