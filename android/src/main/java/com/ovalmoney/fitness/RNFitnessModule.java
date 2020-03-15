@@ -32,6 +32,7 @@ public class RNFitnessModule extends ReactContextBaseJavaModule{
   private final static String CALORIES_KEY = "Calories";
   private final static String DISTANCE_KEY = "Distance";
   private final static String HEART_RATE_KEY = "HeartRate";
+  private final static String SLEEP_ANALYSIS_KEY = "SleepAnalysis";
 
   private final static String ACCESS_TYPE_KEY = "PermissionAccess";
 
@@ -57,6 +58,7 @@ public class RNFitnessModule extends ReactContextBaseJavaModule{
     PERMISSIONS.put(ACTIVITY_KEY, Permission.ACTIVITY);
     PERMISSIONS.put(CALORIES_KEY, Permission.CALORIES);
     PERMISSIONS.put(HEART_RATE_KEY, Permission.HEART_RATE);
+    PERMISSIONS.put(SLEEP_ANALYSIS_KEY, Permission.SLEEP_ANALYSIS);
   }
 
   private void feedAccessesTypeMap(){
@@ -143,6 +145,15 @@ public class RNFitnessModule extends ReactContextBaseJavaModule{
   public void getHeartRate(double startDate, double endDate, String interval, Promise promise){
     try {
       manager.getHeartRate(getCurrentActivity(), startDate, endDate, interval, promise);
+    }catch(Error e){
+      promise.reject(e);
+    }
+  }
+
+  @ReactMethod
+  public void getSleepAnalysis(double startDate, double endDate, Promise promise){
+    try {
+      manager.getSleepAnalysis(getCurrentActivity(), startDate, endDate, promise);
     }catch(Error e){
       promise.reject(e);
     }
