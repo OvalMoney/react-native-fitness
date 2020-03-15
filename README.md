@@ -117,7 +117,7 @@ At the moment the list of possible kinds is:
  - ***Calories***: to required the access for `Calories`
  - ***HeartRate***: to required the access for `Heart rate`
  - ***Activity***: to required the access for `Activity` (only Android)
- - ***SleepAnalysis***: to required the access for `Sleep Analysis` (only iOS)
+ - ***SleepAnalysis***: to required the access for `Sleep Analysis`
 
 
 #### PermissionAccess
