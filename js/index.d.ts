@@ -56,6 +56,7 @@ export declare type StepsResponse = StepRecord[]
 
 /**
  * Fetch steps on a given period of time. 
+ * 
  * If startDate is not provided an error will be thrown. 
  * If endDate is not provided, the current date will be used.
  * Set interval to decide how detailed the returned data is, set it to hour otherwise it defaults to days.
@@ -80,7 +81,8 @@ export declare interface DistanceRecord {
 export declare type DistanceResponse = DistanceRecord[]
 
 /**
- * Fetch distance in meters on a given period of time. 
+ * Fetch distance in meters on a given period of time.
+ *  
  * If startDate is not provided an error will be thrown. 
  * If endDate is not provided, the current date will be used.
  * Set interval to decide how detailed the returned data is, set it to hour otherwise it defaults to days.
@@ -105,7 +107,8 @@ export declare interface CalorieRecord {
 export declare type CaloriesResponse = CalorieRecord[]
 
 /**
- * Fetch calories burnt in kilocalories on a given period of time. 
+ * Fetch calories burnt in kilocalories on a given period of time.
+ * 
  * If startDate is not provided an error will be thrown. 
  * If endDate is not provided, the current date will be used.
  * Set interval to decide how detailed the returned data is, set it to hour otherwise it defaults to days.
@@ -131,6 +134,7 @@ export declare type HeartRateResponse = HeartRateRecord[]
 
 /**
  * Fetch heart rate bpm on a given period of time.
+ * 
  * If startDate is not provided an error will be thrown. 
  * If endDate is not provided, the current date will be used.
  * Set interval to decide how detailed the returned data is, set it to hour otherwise it defaults to days.
@@ -142,6 +146,7 @@ export declare function getHeartRate(request: HeartRateRequest): Promise<HeartRa
 
 /**
  * Available only on Android. 
+ * 
  * Subscribe to all Google Fit activities.
  * 
  * @return Promise<boolean>
@@ -150,6 +155,7 @@ export declare function subscribeToActivity(): Promise<boolean>
 
 /**
  * Available only on Android. 
+ * 
  * Subscribe only to steps from the Google Fit store.
  * 
  * @return Promise<boolean>
