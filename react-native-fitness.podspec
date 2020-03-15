@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.authors      = package['contributors'].flat_map { |author| { author['name'] => author['email'] } }
   s.homepage     = package['homepage']
   s.license      = package['license']
-  s.platform     = :ios, "8.0"
+  s.platform     = :ios, "10.0"
 
   s.source       = { :git => "git@github.com:OvalMoney/react-native-fitness.git", :tag => "master" }
   s.source_files  = "ios/RCTFitness/**/*.{h,m}"
