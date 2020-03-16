@@ -16,7 +16,7 @@ or
 
 ### Mostly automatic installation
 
-`$ react-native link @ovalmoney/react-native-fitness`
+`react-native link @ovalmoney/react-native-fitness`
 
 ### Manual installation
 
@@ -24,38 +24,39 @@ or
 #### iOS
 
 ### Pods
-1. Add the line below to your podfile then run `pod install`
-    ```
+1. Add the line below to your `Podfile`.
+    ```pod
     pod 'react-native-fitness', :path => '../node_modules/@ovalmoney/react-native-fitness'`
     ```
-2. In XCode, in the project navigator, select your project. Add `libreact-native-fitness.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
-3. Add `NSHealthShareUsageDescription` to your `Info.plist` in order to ask permissions.
-    ```
+2. Run `pod install` in your iOS project directory.
+3. In XCode, select your project, go to `Build Phases` ➜ `Link Binary With Libraries` and add `libreact-native-fitness.a`.
+4. Add following to your `Info.plist` in order to ask permissions.
+    ```xml
     <key>NSHealthShareUsageDescription</key>
     <string>Read and understand health data.</string>
     ```
 
 ### Manually
 
-1. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
-2. Go to `node_modules` ➜ `react-native-fitness` and add `RNFitness.xcodeproj`
-3. In XCode, in the project navigator, select your project. Add `libRNFitness.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
+1. In XCode's project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
+2. Go to `node_modules` ➜ `@ovalmoney` ➜ `react-native-fitness` and select `RNFitness.xcodeproj`
+3. In XCode select your project, go to `Build Phases` ➜ `Link Binary With Libraries` and add `libRNFitness.a`.
 4. Run your project (`Cmd+R`)
 
 In order to make it run, it is necessary to turn on `Health Kit` in the `Capabilities`.
 
 #### Android
 1. Get an OAuth 2.0 Client ID as explained at https://developers.google.com/fit/android/get-api-key
-2. Open up `android/app/src/main/java/[...]/MainApplication.java`
-    - Add `import com.oval.fitness.RNFitnessPackage;` to the imports at the top of the file
+2. Open up `MainApplication.java`
+    - Add `import com.ovalmoney.fitness.RNFitnessPackage;` to the imports at the top of the file
     - Add `new RNFitnessPackage()` to the list returned by the `getPackages()` method
 3. Append the following lines to `android/settings.gradle`:
-  	```
+  	```java
   	include ':@ovalmoney_react-native-fitness'
   	project(':@ovalmoney_react-native-fitness').projectDir = new File(rootProject.projectDir, 	'../node_modules/@ovalmoney/react-native-fitness/android')
   	```
 4. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
-  	```
+  	```java
     compile project(':@ovalmoney_react-native-fitness')
   	```
 
@@ -136,7 +137,7 @@ Return the list of meaningful errors that can be possible thrown.
 On Android it is an empty object.
 Possible values are:
  - ***hkNotAvailable***: thrown if HealthKit is not available
- - ***methodNotAvailable***: thrown if ```isAuthorized``` is called on iOS < 12.0
+ - ***methodNotAvailable***: thrown if `isAuthorized` is called on iOS < 12.0
  -  ***dateNotCorrect***: thrown if received date is not correct
  - ***errorEmptyPermissions***: thrown if no read permissions are provided
  - ***errorNoEvents***: thrown if an error occurs while try to retrieve data
