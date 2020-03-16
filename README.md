@@ -25,24 +25,30 @@ or
 
 ### Pods
 1. Add the line below to your podfile then run `pod install`
-`pod 'react-native-fitness', :path => '../node_modules/@ovalmoney/react-native-fitness'`
+    ```
+    pod 'react-native-fitness', :path => '../node_modules/@ovalmoney/react-native-fitness'`
+    ```
 2. In XCode, in the project navigator, select your project. Add `libreact-native-fitness.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
 3. Add `NSHealthShareUsageDescription` to your `Info.plist` in order to ask permissions.
+    ```
+    <key>NSHealthShareUsageDescription</key>
+    <string>Read and understand health data.</string>
+    ```
 
 ### Manually
 
 1. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
 2. Go to `node_modules` ➜ `react-native-fitness` and add `RNFitness.xcodeproj`
 3. In XCode, in the project navigator, select your project. Add `libRNFitness.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
-4. Run your project (`Cmd+R`)<
+4. Run your project (`Cmd+R`)
 
 In order to make it run, it is necessary to turn on `Health Kit` in the `Capabilities`.
 
 #### Android
 1. Get an OAuth 2.0 Client ID as explained at https://developers.google.com/fit/android/get-api-key
-2. Open up `android/app/src/main/java/[...]/MainActivity.java`
-  - Add `import com.oval.fitness.RNFitnessPackage;` to the imports at the top of the file
-  - Add `new RNFitnessPackage()` to the list returned by the `getPackages()` method
+2. Open up `android/app/src/main/java/[...]/MainApplication.java`
+    - Add `import com.oval.fitness.RNFitnessPackage;` to the imports at the top of the file
+    - Add `new RNFitnessPackage()` to the list returned by the `getPackages()` method
 3. Append the following lines to `android/settings.gradle`:
   	```
   	include ':@ovalmoney_react-native-fitness'
@@ -50,7 +56,7 @@ In order to make it run, it is necessary to turn on `Health Kit` in the `Capabil
   	```
 4. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
   	```
-      compile project(':@ovalmoney_react-native-fitness')
+    compile project(':@ovalmoney_react-native-fitness')
   	```
 
 
@@ -59,38 +65,42 @@ In order to make it run, it is necessary to turn on `Health Kit` in the `Capabil
 ```javascript
 import Fitness from '@ovalmoney/react-native-fitness';
 
-Fitness.isAuthorized(permissions: { kind: Fitness.PermissionKind.Steps, access: Fitness.PermissionAccess.Write })
+const permissions = [
+  { kind: Fitness.PermissionKind.Step, access: Fitness.PermissionAccess.Write },
+];
+
+Fitness.isAuthorized(permissions)
   .then((authorized) => {
-    //Do something
+    // Do something
   })
   .catch((error) => {
-    //Do something
+    // Do something
   });
 ```
 ### API
 
-- **Fitness.isAuthorized(permissions: [{ kind: int, access: int }])**
+- **Fitness.isAuthorized([{ kind: int, access: int }])**
 Check if permissions are granted or not. It works on Android and iOS >= 12.0, while it returns an error when iOS < 12.
 It requires an `Array` of `Object` with a mandatory key `kind` and an optional key `access`.
 Possible values for the keys can be found in `PermissionKind` and `PermissionAccess` under `Attributes` section.
 On iOS at least one permissions with `Read` access must be provided, otherwise an `errorEmptyPermissions` will be thrown.
 
-- **Fitness.requestPermissions(permissions: [{ kind: int, access: int }])**
+- **Fitness.requestPermissions([{ kind: int, access: int }])**
 Ask permission and return if user granted or not(Android), while, due to Apple's privacy model, always true is returned in iOS.
 It requires an `Array` of `Object` with a mandatory key `kind` and an optional key `access`.
 Possible values for the keys can be found in `PermissionKind` and `PermissionAccess` under `Attributes` section.
 On iOS at least one permissions with `Read` access must be provided, otherwise an `errorEmptyPermissions` will be thrown.
 
-- **Fitness.getSteps(dates: { startDate: string, endDate: string, interval: string })**
+- **Fitness.getSteps({ startDate: string, endDate: string, interval: string })**
 Fetch steps on a given period of time. It requires an `Object` with `startDate` and `endDate` attributes as string. If startDate is not provided an error will be thrown. Set `interval` to decide how detailed the returned data is, set it to `hour` otherwise it defaults to `days`.
 
-- **Fitness.getDistance(dates: { startDate: string, endDate: string, interval: string })**
+- **Fitness.getDistance({ startDate: string, endDate: string, interval: string })**
 Fetch distance in meters on a given period of time. It requires an `Object` with `startDate` and `endDate` attributes as string. If startDate is not provided an error will be thrown. Set `interval` to decide how detailed the returned data is, set it to `hour` otherwise it defaults to `days`.
 
-- **Fitness.getCalories(dates: { startDate: string, endDate: string, interval: string })**
+- **Fitness.getCalories({ startDate: string, endDate: string, interval: string })**
 Fetch calories burnt in kilocalories on a given period of time. It requires an `Object` with `startDate` and `endDate` attributes as string. If startDate is not provided an error will be thrown. Set `interval` to decide how detailed the returned data is, set it to `hour` otherwise it defaults to `days`.
 
-- **Fitness.getHeartRate(dates: { startDate: string, endDate: string, interval: string })**
+- **Fitness.getHeartRate({ startDate: string, endDate: string, interval: string })**
 Fetch heart rate bpm on a given period of time. It requires an `Object` with `startDate` and `endDate` attributes as string. If startDate is not provided an error will be thrown. Set `interval` to decide how detailed the returned data is, set it to `hour` otherwise it defaults to `days`.
 
 - **Fitness.subscribeToActivity()**
