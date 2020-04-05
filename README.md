@@ -104,7 +104,7 @@ Fetch calories burnt in kilocalories on a given period of time. It requires an `
 - **Fitness.getHeartRate({ startDate: string, endDate: string, interval: string })**
 Fetch heart rate bpm on a given period of time. It requires an `Object` with `startDate` and `endDate` attributes as string. If startDate is not provided an error will be thrown. Set `interval` to decide how detailed the returned data is, set it to `hour` otherwise it defaults to `days`.
 
-- **Fitness.getSleepAnalysis(dates: { startDate: string, endDate: string })**
+- **Fitness.getSleepAnalysis({ startDate: string, endDate: string })**
 Fetch sleep analysis data on a given period of time. It requires an `Object` with `startDate` and `endDate` attributes as string. If startDate is not provided an error will be thrown.
 
 - **Fitness.subscribeToActivity()**
