@@ -8,7 +8,7 @@ typedef NS_ENUM(NSInteger, RCTFitnessPermissionKind)
     DISTANCE,
     ACTIVITY,
     CALORIES,
-    HEART_RATE
+    HEART_RATE,
     SLEEP_ANALYSIS,
 };
 
