@@ -4,6 +4,7 @@ export declare enum PermissionKind {
   Calories = 2,
   HeartRate = 3,
   Activity = 4,
+  SleepAnalysis = 5,
 }
 
 export declare enum PermissionAccess {
