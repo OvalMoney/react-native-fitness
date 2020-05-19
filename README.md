@@ -121,7 +121,7 @@ Return the used provider.
 Return the information of what kind of Permission can be asked.
 At the moment the list of possible kinds is:
  - ***Step***: to required the access for `Step`
- - ***Distances***: to required the access for `Distances`
+ - ***Distance***: to required the access for `Distances`
  - ***Calories***: to required the access for `Calories`
  - ***HeartRate***: to required the access for `Heart rate`
  - ***Activity***: to required the access for `Activity` (only Android)
