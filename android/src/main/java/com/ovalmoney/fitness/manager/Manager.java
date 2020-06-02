@@ -189,7 +189,9 @@ public class Manager implements ActivityEventListener {
                 .build();
 
         TimeUnit interval;
-        if(customInterval == "hour"){
+        if(customInterval == "minute"){
+            interval = TimeUnit.MINUTES;
+        }else if(customInterval == "hour"){
             interval = TimeUnit.HOURS;
         }else{
             interval = TimeUnit.DAYS;
@@ -233,7 +235,9 @@ public class Manager implements ActivityEventListener {
 
     public void getDistance(Context context, double startDate, double endDate, String customInterval, final Promise promise) {
         TimeUnit interval;
-        if(customInterval == "hour"){
+        if(customInterval == "minute"){
+            interval = TimeUnit.MINUTES;
+        }else if(customInterval == "hour"){
             interval = TimeUnit.HOURS;
         }else{
             interval = TimeUnit.DAYS;
@@ -277,7 +281,9 @@ public class Manager implements ActivityEventListener {
 
     public void getCalories(Context context, double startDate, double endDate, String customInterval, final Promise promise) {
         TimeUnit interval;
-        if(customInterval == "hour"){
+        if(customInterval == "minute"){
+            interval = TimeUnit.MINUTES;
+        }else if(customInterval == "hour"){
             interval = TimeUnit.HOURS;
         }else{
             interval = TimeUnit.DAYS;
@@ -320,7 +326,9 @@ public class Manager implements ActivityEventListener {
 
      public void getHeartRate(Context context, double startDate, double endDate, String customInterval,final Promise promise) {
         TimeUnit interval;
-        if(customInterval == "hour"){
+        if(customInterval == "minute"){
+            interval = TimeUnit.MINUTES;
+        }else if(customInterval == "hour"){
             interval = TimeUnit.HOURS;
         }else{
             interval = TimeUnit.DAYS;
