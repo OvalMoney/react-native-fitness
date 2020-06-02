@@ -38,7 +38,7 @@ export declare function requestPermissions(permissions: Permission[]): Promise<b
  * 
  * @type string
  */
-export declare type Interval = 'days' | 'hour'
+export declare type Interval = 'days' | 'hour' | 'minute'
 
 export declare interface StepsRequest {
   startDate: string
@@ -59,7 +59,7 @@ export declare type StepsResponse = StepRecord[]
  * 
  * If startDate is not provided an error will be thrown. 
  * If endDate is not provided, the current date will be used.
- * Set interval to decide how detailed the returned data is, set it to hour otherwise it defaults to days.
+ * Set interval to decide how detailed the returned data is, set it to hour or minute otherwise it defaults to days.
  * 
  * @param request StepsRequest
  * @return Promise<StepsResponse>
@@ -85,7 +85,7 @@ export declare type DistanceResponse = DistanceRecord[]
  *  
  * If startDate is not provided an error will be thrown. 
  * If endDate is not provided, the current date will be used.
- * Set interval to decide how detailed the returned data is, set it to hour otherwise it defaults to days.
+ * Set interval to decide how detailed the returned data is, set it to hour or minute otherwise it defaults to days.
  * 
  * @param request DistanceRequest
  * @return Promise<DistanceResponse>
@@ -111,7 +111,7 @@ export declare type CaloriesResponse = CalorieRecord[]
  * 
  * If startDate is not provided an error will be thrown. 
  * If endDate is not provided, the current date will be used.
- * Set interval to decide how detailed the returned data is, set it to hour otherwise it defaults to days.
+ * Set interval to decide how detailed the returned data is, set it to hour or minute otherwise it defaults to days.
  * 
  * @param request CaloriesRequest
  * @return Promise<CaloriesResponse>
@@ -137,7 +137,7 @@ export declare type HeartRateResponse = HeartRateRecord[]
  * 
  * If startDate is not provided an error will be thrown. 
  * If endDate is not provided, the current date will be used.
- * Set interval to decide how detailed the returned data is, set it to hour otherwise it defaults to days.
+ * Set interval to decide how detailed the returned data is, set it to hour or minute otherwise it defaults to days.
  * 
  * @param request HeartRateRequest
  * @return Promise<HeartRateResponse>

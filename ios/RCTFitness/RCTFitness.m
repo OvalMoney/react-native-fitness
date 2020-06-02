@@ -165,7 +165,9 @@ RCT_REMAP_METHOD(getSteps,
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *interval = [[NSDateComponents alloc] init];
     
-    if([customInterval isEqual: @"hour"]){
+    if([customInterval isEqual: @"minute"]){
+        interval.minute = 1;
+    }else if([customInterval isEqual: @"hour"]){
         interval.hour = 1;
     }else{
         interval.day = 1;
@@ -238,7 +240,9 @@ RCT_REMAP_METHOD(getDistance,
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *interval = [[NSDateComponents alloc] init];
     
-    if([customInterval  isEqual: @"hour"]){
+    if([customInterval isEqual: @"minute"]){
+        interval.minute = 1;
+    }else if([customInterval isEqual: @"hour"]){
         interval.hour = 1;
     }else{
         interval.day = 1;
@@ -307,7 +311,9 @@ RCT_REMAP_METHOD(getCalories,
     NSCalendar *calendar = [NSCalendar currentCalendar];
     
     NSDateComponents *interval = [[NSDateComponents alloc] init];
-    if([customInterval  isEqual: @"hour"]){
+    if([customInterval isEqual: @"minute"]){
+        interval.minute = 1;
+    }else if([customInterval isEqual: @"hour"]){
         interval.hour = 1;
     }else{
         interval.day = 1;
@@ -374,7 +380,9 @@ RCT_REMAP_METHOD(getHeartRate,
     NSCalendar *calendar = [NSCalendar currentCalendar];
    
     NSDateComponents *interval = [[NSDateComponents alloc] init];
-        if([customInterval  isEqual: @"hour"]){
+    if([customInterval isEqual: @"minute"]){
+        interval.minute = 1;
+    }else if([customInterval isEqual: @"hour"]){
         interval.hour = 1;
     }else{
         interval.day = 1;
