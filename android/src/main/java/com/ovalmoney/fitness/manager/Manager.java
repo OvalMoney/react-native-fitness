@@ -71,9 +71,8 @@ public class Manager implements ActivityEventListener {
     private static TimeUnit getInterval(String customInterval) {
         if(customInterval.equals("hour")) {
             return TimeUnit.HOURS;
-        } else {
-            return TimeUnit.DAYS;
         }
+        return TimeUnit.DAYS;
     }
 
     protected FitnessOptions.Builder addPermissionToFitnessOptions(final FitnessOptions.Builder fitnessOptions, final ArrayList<Request> permissions){
