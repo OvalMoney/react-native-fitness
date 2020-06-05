@@ -69,13 +69,11 @@ public class Manager implements ActivityEventListener {
     }
 
     private static TimeUnit getInterval(String customInterval) {
-        TimeUnit interval;
         if(customInterval.equals("hour")) {
-            interval = TimeUnit.HOURS;
+            return TimeUnit.HOURS;
         } else {
-            interval = TimeUnit.DAYS;
+            return TimeUnit.DAYS;
         }
-        return interval;
     }
 
     protected FitnessOptions.Builder addPermissionToFitnessOptions(final FitnessOptions.Builder fitnessOptions, final ArrayList<Request> permissions){
