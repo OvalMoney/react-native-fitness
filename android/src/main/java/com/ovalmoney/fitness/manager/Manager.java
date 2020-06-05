@@ -68,6 +68,16 @@ public class Manager implements ActivityEventListener {
         return true;
     }
 
+    private static TimeUnit getInterval(String customInterval) {
+        TimeUnit interval;
+        if(customInterval.equals("hour")) {
+            interval = TimeUnit.HOURS;
+        } else {
+            interval = TimeUnit.DAYS;
+        }
+        return interval;
+    }
+
     protected FitnessOptions.Builder addPermissionToFitnessOptions(final FitnessOptions.Builder fitnessOptions, final ArrayList<Request> permissions){
         int length = permissions.size();
         for(int i = 0; i < length; i++){
@@ -188,12 +198,7 @@ public class Manager implements ActivityEventListener {
                 .setAppPackageName("com.google.android.gms")
                 .build();
 
-        TimeUnit interval;
-        if(customInterval == "hour"){
-            interval = TimeUnit.HOURS;
-        }else{
-            interval = TimeUnit.DAYS;
-        }
+        TimeUnit interval = getInterval(customInterval);
 
         DataReadRequest readRequest = new DataReadRequest.Builder()
                 .aggregate(ESTIMATED_STEP_DELTAS,    DataType.AGGREGATE_STEP_COUNT_DELTA)
@@ -232,12 +237,7 @@ public class Manager implements ActivityEventListener {
     }
 
     public void getDistance(Context context, double startDate, double endDate, String customInterval, final Promise promise) {
-        TimeUnit interval;
-        if(customInterval == "hour"){
-            interval = TimeUnit.HOURS;
-        }else{
-            interval = TimeUnit.DAYS;
-        }
+        TimeUnit interval = getInterval(customInterval);
 
         DataReadRequest readRequest = new DataReadRequest.Builder()
                 .aggregate(DataType.TYPE_DISTANCE_DELTA, DataType.AGGREGATE_DISTANCE_DELTA)
@@ -276,12 +276,8 @@ public class Manager implements ActivityEventListener {
     }
 
     public void getCalories(Context context, double startDate, double endDate, String customInterval, final Promise promise) {
-        TimeUnit interval;
-        if(customInterval == "hour"){
-            interval = TimeUnit.HOURS;
-        }else{
-            interval = TimeUnit.DAYS;
-        }
+        TimeUnit interval = getInterval(customInterval);
+
         DataReadRequest readRequest = new DataReadRequest.Builder()
                 .aggregate(DataType.TYPE_CALORIES_EXPENDED, DataType.AGGREGATE_CALORIES_EXPENDED)
                 .bucketByTime(1, interval)
@@ -319,12 +315,7 @@ public class Manager implements ActivityEventListener {
     }
 
      public void getHeartRate(Context context, double startDate, double endDate, String customInterval,final Promise promise) {
-        TimeUnit interval;
-        if(customInterval == "hour"){
-            interval = TimeUnit.HOURS;
-        }else{
-            interval = TimeUnit.DAYS;
-        }
+        TimeUnit interval = getInterval(customInterval);
 
         DataReadRequest readRequest = new DataReadRequest.Builder()
                 .aggregate(DataType.TYPE_HEART_RATE_BPM, DataType.AGGREGATE_HEART_RATE_SUMMARY)
