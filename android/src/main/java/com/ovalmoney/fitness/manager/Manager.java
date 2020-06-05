@@ -69,6 +69,9 @@ public class Manager implements ActivityEventListener {
     }
 
     private static TimeUnit getInterval(String customInterval) {
+        if(customInterval.equals("minute")) {
+            return TimeUnit.MINUTES;
+        }
         if(customInterval.equals("hour")) {
             return TimeUnit.HOURS;
         }
