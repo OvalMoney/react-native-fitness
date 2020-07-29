@@ -364,6 +364,11 @@ public class Manager implements ActivityEventListener {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void getSleepAnalysis(Context context, double startDate, double endDate, final Promise promise) {
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.N){
+            promise.reject(String.valueOf(FitnessError.ERROR_METHOD_NOT_AVAILABLE), "Method not available");
+            return;
+        }
+        
         SessionReadRequest request = new SessionReadRequest.Builder()
                 .readSessionsFromAllApps()
                 .read(DataType.TYPE_ACTIVITY_SEGMENT)
