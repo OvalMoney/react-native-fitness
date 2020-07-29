@@ -15,6 +15,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Promise;
+import com.ovalmoney.fitness.manager.FitnessError;
 import com.ovalmoney.fitness.permission.Permission;
 import com.ovalmoney.fitness.permission.Request;
 
@@ -25,6 +26,7 @@ public class RNFitnessModule extends ReactContextBaseJavaModule{
   private final static String PLATFORM = "GoogleFit";
 
   private final static String ERROR_KEY = "Error";
+  private final static String ERROR_METHOD_NOT_AVAILABLE_KEY = "methodNotAvailable";
 
   private final static String PERMISSIONS_KEY = "PermissionKind";
   private final static String STEP_KEY = "Step";
@@ -41,6 +43,7 @@ public class RNFitnessModule extends ReactContextBaseJavaModule{
 
   private final static Map<String, Integer> PERMISSIONS = new HashMap<>();
   private final static Map<String, Integer> ACCESSES = new HashMap<>();
+  private final static Map<String, Integer> ERRORS = new HashMap<>();
 
   private final Manager manager;
 
@@ -66,6 +69,10 @@ public class RNFitnessModule extends ReactContextBaseJavaModule{
     ACCESSES.put(WRITE, FitnessOptions.ACCESS_WRITE);
   }
 
+  private void feedErrorsMap(){
+    ERRORS.put(ERROR_METHOD_NOT_AVAILABLE_KEY, FitnessError.ERROR_METHOD_NOT_AVAILABLE);
+  }
+
   @Override
   public String getName() {
     return "Fitness";
@@ -77,7 +84,7 @@ public class RNFitnessModule extends ReactContextBaseJavaModule{
     constants.put(PLATFORM_KEY, PLATFORM);
     constants.put(PERMISSIONS_KEY, PERMISSIONS);
     constants.put(ACCESS_TYPE_KEY, ACCESSES);
-    constants.put(ERROR_KEY, new HashMap<>());
+    constants.put(ERROR_KEY, ERRORS);
     return constants;
   }
 
