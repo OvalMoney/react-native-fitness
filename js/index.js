@@ -55,6 +55,18 @@ const getHeartRate = ({ startDate, endDate, interval = "days" }) =>
   );
 
 /**
+ * Get native getSleepAnalysis with parsed Dates
+ * @param startDate
+ * @param endDate
+ * @returns {*}
+ */
+const getSleepAnalysis = ({ startDate, endDate }) =>
+  NativeModules.Fitness.getSleepAnalysis(
+    parseDate(startDate),
+    parseDate(endDate)
+  );
+
+/**
  * Check if valid date and parse it
  * @param date: Date to parse
  */
@@ -70,10 +82,12 @@ const parseDate = date => {
   return parsed;
 };
 
+
 export default {
   ...NativeModules.Fitness,
   getSteps,
   getDistance,
   getCalories,
   getHeartRate,
+  getSleepAnalysis,
 };

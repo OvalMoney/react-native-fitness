@@ -4,6 +4,7 @@ export declare enum PermissionKind {
   Calories = 2,
   HeartRate = 3,
   Activity = 4,
+  SleepAnalysis = 5,
 }
 
 export declare enum PermissionAccess {
@@ -144,6 +145,32 @@ export declare type HeartRateResponse = HeartRateRecord[]
  */
 export declare function getHeartRate(request: HeartRateRequest): Promise<HeartRateResponse>
 
+export declare interface SleepAnalysisRequest {
+  startDate: string
+  endDate: string
+}
+
+export declare interface SleepAnalysisRecord {
+  startDate: string
+  endDate: string
+  value: number
+  sourceName: string
+  sourceId: string
+}
+
+export declare type SleepAnalysisResponse = SleepAnalysisRecord[]
+
+/**
+ * Fetch sleep analysis data on a given period of time. 
+ *
+ * It requires an Object with startDate and endDate attributes as string. 
+ * If startDate is not provided an error will be thrown.
+ * 
+ * @param request SleepAnalysisRequest
+ * @return Promise<SleepAnalysisResponse>
+ */
+export declare function getSleepAnalysis(request: SleepAnalysisRequest): Promise<SleepAnalysisResponse>
+  
 /**
  * Available only on Android. 
  * 

@@ -23,7 +23,8 @@ RCT_ENUM_CONVERTER(RCTFitnessPermissionKind, (@{ @"Step" : @(STEP),
                                                  @"Distance" : @(DISTANCE),
                                                  @"Calories" : @(CALORIES),
                                                  @"Activity" : @(ACTIVITY),
-                                                 @"HeartRate" : @(HEART_RATE)}),
+                                                 @"HeartRate" : @(HEART_RATE),
+                                                 @"SleepAnalysis" : @(SLEEP_ANALYSIS)}),
                    STEP, integerValue)
 @end
 
@@ -91,6 +92,7 @@ RCT_EXPORT_MODULE(Fitness);
                 @"Calories": @(CALORIES),
                 @"Activity": @(ACTIVITY),
                 @"HeartRate": @(HEART_RATE),
+                @"SleepAnalysis" : @(SLEEP_ANALYSIS),
         },
         @"PermissionAccess": @{
                 @"Read": @(READ),
@@ -432,5 +434,68 @@ RCT_REMAP_METHOD(getHeartRate,
     [self.healthStore executeQuery:query];
 }
 
+RCT_REMAP_METHOD(getSleepAnalysis,
+                 withStartDate: (double) startDate
+                 andEndDate: (double) endDate
+                 withSleepAnalysisResolver:(RCTPromiseResolveBlock)resolve
+                 andSleepAnalysisRejecter:(RCTPromiseRejectBlock)reject){
+    
+    if(!startDate){
+        NSError * error = [RCTFitness createErrorWithCode:ErrorDateNotCorrect andDescription:RCT_ERROR_DATE_NOT_CORRECT];
+        [RCTFitness handleRejectBlock:reject error:error];
+        return;
+    }
+    
+    NSDate * sd = [RCTFitness dateFromTimeStamp: startDate / 1000];
+    NSDate * ed = [RCTFitness dateFromTimeStamp: endDate   / 1000];
+
+    HKSampleType *sampleType = [HKSampleType categoryTypeForIdentifier:HKCategoryTypeIdentifierSleepAnalysis];
+    NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:sd endDate:ed options:HKQueryOptionNone];
+
+    HKSampleQuery *query = [[HKSampleQuery alloc] initWithSampleType:sampleType predicate:predicate limit:0 sortDescriptors:nil resultsHandler:^(HKSampleQuery *query, NSArray *results, NSError *error) {
+        if (error) {
+            NSError * error = [RCTFitness createErrorWithCode:ErrorNoEvents andDescription:RCT_ERROR_NO_EVENTS];
+            [RCTFitness handleRejectBlock:reject error:error];
+            return;
+        }
+
+        NSMutableArray *data = [NSMutableArray arrayWithCapacity:1];
+        
+        for (HKCategorySample *sample in results) {
+            NSString *startDateString = [RCTFitness ISO8601StringFromDate: sample.startDate];
+            NSString *endDateString = [RCTFitness ISO8601StringFromDate: sample.endDate];
+
+            NSString *valueString;
+
+            switch (sample.value) {
+                case HKCategoryValueSleepAnalysisInBed:
+                  valueString = @"INBED";
+                break;
+                case HKCategoryValueSleepAnalysisAsleep:
+                  valueString = @"ASLEEP";
+                break;
+               default:
+                  valueString = @"UNKNOWN";
+               break;
+            }
+            
+            NSDictionary *elem = @{
+                    @"value" : valueString,
+                    @"sourceName" : [[[sample sourceRevision] source] name],
+                    @"sourceId" : [[[sample sourceRevision] source] bundleIdentifier],
+                    @"startDate" : startDateString,
+                    @"endDate" : endDateString,
+            };
+
+            [data addObject:elem];
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            resolve(data);
+        });
+    }];
+    
+    [self.healthStore executeQuery:query];
+}
 
 @end
