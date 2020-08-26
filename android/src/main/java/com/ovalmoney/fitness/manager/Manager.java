@@ -157,9 +157,15 @@ public class Manager implements ActivityEventListener {
     public void subscribeToActivity(Context context, final Promise promise){
         final GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(context);
         if(account == null){
-            promise.resolve(false);
+            promise.resolve('Not signed in to a google account');
             return;
         }
+        if (ContextCompat.checkSelfPermission(thisActivity, Manifest.permission.ACTIVITY_RECOGNITION)
+                          != PackageManager.PERMISSION_GRANTED) {
+                      ActivityCompat.requestPermissions(thisActivity,
+                                  arrayOf(Manifest.permission.ACTIVITY_RECOGNITION),
+                                  MY_PERMISSIONS_REQUEST_ACTIVITY_RECOGNITION);
+                } else {
         Fitness.getRecordingClient(context, account)
                 .subscribe(DataType.TYPE_ACTIVITY_SAMPLES)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -171,32 +177,41 @@ public class Manager implements ActivityEventListener {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        promise.resolve(false);
+                        promise.resolve(e);
                     }
                 });
+                }
 
     }
 
     public void subscribeToSteps(Context context, final Promise promise){
         final GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(context);
         if(account == null){
-            promise.resolve(false);
+          promise.resolve('Not signed in to a google account');
             return;
         }
-        Fitness.getRecordingClient(context, account)
-                .subscribe(DataType.TYPE_STEP_COUNT_DELTA)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        promise.resolve(true);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        promise.resolve(false);
-                    }
-                });
+        if (ContextCompat.checkSelfPermission(thisActivity, Manifest.permission.ACTIVITY_RECOGNITION)
+                  != PackageManager.PERMISSION_GRANTED) {
+              ActivityCompat.requestPermissions(thisActivity,
+                          arrayOf(Manifest.permission.ACTIVITY_RECOGNITION),
+                          MY_PERMISSIONS_REQUEST_ACTIVITY_RECOGNITION);
+        } else {
+          Fitness.getRecordingClient(context, account)
+                        .subscribe(DataType.TYPE_STEP_COUNT_DELTA)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                promise.resolve(true);
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                promise.resolve(e);
+                            }
+                        });
+        }
+
     }
 
     public void getSteps(Context context, double startDate, double endDate, String customInterval, final Promise promise){
