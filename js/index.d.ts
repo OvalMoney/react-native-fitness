@@ -9,7 +9,7 @@ export declare enum PermissionKind {
 
 export declare enum PermissionAccess {
   Read = 0,
-  Wrtie = 1,
+  Write = 1,
 }
 
 export declare type Permission = {
