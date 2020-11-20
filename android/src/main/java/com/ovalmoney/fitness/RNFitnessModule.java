@@ -51,6 +51,7 @@ public class RNFitnessModule extends ReactContextBaseJavaModule{
     super(reactContext);
     feedPermissionsMap();
     feedAccessesTypeMap();
+    feedErrorsMap();
     this.manager = new Manager();
     reactContext.addActivityEventListener(this.manager);
   }
