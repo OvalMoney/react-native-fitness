@@ -4,8 +4,8 @@
 
 typedef NS_ENUM(NSInteger, RCTFitnessPermissionKind)
 {
-    STEP = 0,
-    DISTANCE,
+    STEPS = 0,
+    DISTANCES,
     ACTIVITY,
     CALORIES,
     HEART_RATE,

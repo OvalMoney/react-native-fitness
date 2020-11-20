@@ -19,13 +19,13 @@ RCT_ENUM_CONVERTER(RCTFitnessError, (@{ @"hkNotAvailable" : @(ErrorHKNotAvailabl
 @end
 
 @implementation RCTConvert (Permission)
-RCT_ENUM_CONVERTER(RCTFitnessPermissionKind, (@{ @"Step" : @(STEP),
-                                                 @"Distance" : @(DISTANCE),
+RCT_ENUM_CONVERTER(RCTFitnessPermissionKind, (@{ @"Steps" : @(STEPS),
+                                                 @"Distances" : @(DISTANCES),
                                                  @"Calories" : @(CALORIES),
                                                  @"Activity" : @(ACTIVITY),
                                                  @"HeartRate" : @(HEART_RATE),
                                                  @"SleepAnalysis" : @(SLEEP_ANALYSIS)}),
-                   STEP, integerValue)
+                   STEPS, integerValue)
 @end
 
 @implementation RCTConvert (PermissionAccess)
@@ -80,21 +80,21 @@ RCT_EXPORT_MODULE(Fitness);
 - (NSDictionary *)constantsToExport{
     return @{
         @"Platform" : @"AppleHealth",
-        @"Error": @{
+        @"Errors": @{
                 @"hkNotAvailable" : @(ErrorHKNotAvailable),
                 @"methodNotAvailable" : @(ErrorMethodNotAvailable),
                 @"dateNotCorrect" : @(ErrorDateNotCorrect),
                 @"emptyPermission" : @(ErrorEmptyPermissions),
         },
-        @"PermissionKind": @{
-                @"Step": @(STEP),
-                @"Distance": @(DISTANCE),
+        @"PermissionKinds": @{
+                @"Steps": @(STEPS),
+                @"Distances": @(DISTANCES),
                 @"Calories": @(CALORIES),
                 @"Activity": @(ACTIVITY),
                 @"HeartRate": @(HEART_RATE),
                 @"SleepAnalysis" : @(SLEEP_ANALYSIS),
         },
-        @"PermissionAccess": @{
+        @"PermissionAccesses": @{
                 @"Read": @(READ),
                 @"Write": @(WRITE),
         },

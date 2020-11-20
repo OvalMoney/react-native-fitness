@@ -16,7 +16,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Promise;
 import com.ovalmoney.fitness.manager.FitnessError;
-import com.ovalmoney.fitness.permission.Permission;
+import com.ovalmoney.fitness.permission.Permissions;
 import com.ovalmoney.fitness.permission.Request;
 
 public class RNFitnessModule extends ReactContextBaseJavaModule{
@@ -25,21 +25,21 @@ public class RNFitnessModule extends ReactContextBaseJavaModule{
   private final static String PLATFORM_KEY = "Platform";
   private final static String PLATFORM = "GoogleFit";
 
-  private final static String ERROR_KEY = "Error";
+  private final static String ERRORS_KEY = "Errors";
   private final static String ERROR_METHOD_NOT_AVAILABLE_KEY = "methodNotAvailable";
 
-  private final static String PERMISSIONS_KEY = "PermissionKind";
-  private final static String STEP_KEY = "Step";
+  private final static String PERMISSIONS_KEY = "PermissionKinds";
+  private final static String STEPS_KEY = "Steps";
   private final static String ACTIVITY_KEY = "Activity";
   private final static String CALORIES_KEY = "Calories";
-  private final static String DISTANCE_KEY = "Distance";
+  private final static String DISTANCES_KEY = "Distances";
   private final static String HEART_RATE_KEY = "HeartRate";
   private final static String SLEEP_ANALYSIS_KEY = "SleepAnalysis";
 
-  private final static String ACCESS_TYPE_KEY = "PermissionAccess";
+  private final static String ACCESS_TYPE_KEY = "PermissionAccesses";
 
-  private final static String READ = "READ";
-  private final static String WRITE = "WRITE";
+  private final static String READ = "Read";
+  private final static String WRITE = "Write";
 
   private final static Map<String, Integer> PERMISSIONS = new HashMap<>();
   private final static Map<String, Integer> ACCESSES = new HashMap<>();
@@ -56,12 +56,12 @@ public class RNFitnessModule extends ReactContextBaseJavaModule{
   }
 
   private void feedPermissionsMap(){
-    PERMISSIONS.put(STEP_KEY, Permission.STEP);
-    PERMISSIONS.put(DISTANCE_KEY, Permission.DISTANCE);
-    PERMISSIONS.put(ACTIVITY_KEY, Permission.ACTIVITY);
-    PERMISSIONS.put(CALORIES_KEY, Permission.CALORIES);
-    PERMISSIONS.put(HEART_RATE_KEY, Permission.HEART_RATE);
-    PERMISSIONS.put(SLEEP_ANALYSIS_KEY, Permission.SLEEP_ANALYSIS);
+    PERMISSIONS.put(STEPS_KEY, Permissions.STEPS);
+    PERMISSIONS.put(DISTANCES_KEY, Permissions.DISTANCES);
+    PERMISSIONS.put(ACTIVITY_KEY, Permissions.ACTIVITY);
+    PERMISSIONS.put(CALORIES_KEY, Permissions.CALORIES);
+    PERMISSIONS.put(HEART_RATE_KEY, Permissions.HEART_RATE);
+    PERMISSIONS.put(SLEEP_ANALYSIS_KEY, Permissions.SLEEP_ANALYSIS);
   }
 
   private void feedAccessesTypeMap(){
@@ -84,7 +84,7 @@ public class RNFitnessModule extends ReactContextBaseJavaModule{
     constants.put(PLATFORM_KEY, PLATFORM);
     constants.put(PERMISSIONS_KEY, PERMISSIONS);
     constants.put(ACCESS_TYPE_KEY, ACCESSES);
-    constants.put(ERROR_KEY, ERRORS);
+    constants.put(ERRORS_KEY, ERRORS);
     return constants;
   }
 

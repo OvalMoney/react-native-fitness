@@ -67,7 +67,7 @@ In order to make it run, it is necessary to turn on `Health Kit` in the `Capabil
 import Fitness from '@ovalmoney/react-native-fitness';
 
 const permissions = [
-  { kind: Fitness.PermissionKind.Step, access: Fitness.PermissionAccess.Write },
+  { kind: Fitness.PermissionKind.Steps, access: Fitness.PermissionAccess.Write },
 ];
 
 Fitness.isAuthorized(permissions)
@@ -95,7 +95,7 @@ On iOS at least one permissions with `Read` access must be provided, otherwise a
 - **Fitness.getSteps({ startDate: string, endDate: string, interval: string })**
 Fetch steps on a given period of time. It requires an `Object` with `startDate` and `endDate` attributes as string. If startDate is not provided an error will be thrown. Set `interval` to decide how detailed the returned data is, set it to `hour` or `minute` otherwise it defaults to `days`.
 
-- **Fitness.getDistance({ startDate: string, endDate: string, interval: string })**
+- **Fitness.getDistances({ startDate: string, endDate: string, interval: string })**
 Fetch distance in meters on a given period of time. It requires an `Object` with `startDate` and `endDate` attributes as string. If startDate is not provided an error will be thrown. Set `interval` to decide how detailed the returned data is, set it to `hour` or `minute` otherwise it defaults to `days`.
 
 - **Fitness.getCalories({ startDate: string, endDate: string, interval: string })**
@@ -123,8 +123,8 @@ Return the used provider.
 #### PermissionKind
 Return the information of what kind of Permission can be asked.
 At the moment the list of possible kinds is:
- - ***Step***: to required the access for `Step`
- - ***Distance***: to required the access for `Distances`
+ - ***Steps***: to required the access for `Steps`
+ - ***Distances***: to required the access for `Distances`
  - ***Calories***: to required the access for `Calories`
  - ***HeartRate***: to required the access for `Heart rate`
  - ***Activity***: to required the access for `Activity` (only Android)
@@ -143,7 +143,7 @@ On Android it is an empty object.
 Possible values are:
  - ***hkNotAvailable***: thrown if HealthKit is not available
  - ***methodNotAvailable***: thrown if `isAuthorized` is called on iOS < 12.0
- -  ***dateNotCorrect***: thrown if received date is not correct
+ - ***dateNotCorrect***: thrown if received date is not correct
  - ***errorEmptyPermissions***: thrown if no read permissions are provided
  - ***errorNoEvents***: thrown if an error occurs while try to retrieve data
 

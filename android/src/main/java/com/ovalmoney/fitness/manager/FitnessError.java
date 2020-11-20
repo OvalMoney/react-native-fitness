@@ -11,5 +11,5 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
     })
 
     public @interface FitnessError {
-        int ERROR_METHOD_NOT_AVAILABLE = -101;
+        int ERROR_METHOD_NOT_AVAILABLE = -99;
     }

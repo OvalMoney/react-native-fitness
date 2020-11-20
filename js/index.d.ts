@@ -1,20 +1,36 @@
-export declare enum PermissionKind {
-  Steps = 0,
-  Distances = 1,
-  Calories = 2,
-  HeartRate = 3,
-  Activity = 4,
-  SleepAnalysis = 5,
-}
+const Errors = {
+  ErrorHKNotAvailable: -100,
+  ErrorMethodNotAvailable: -99,
+  ErrorDateNotCorrect: -98,
+  ErrorNoEvents: -97,
+  ErrorEmptyPermissions: -96,
+} as const;
 
-export declare enum PermissionAccess {
-  Read = 0,
-  Write = 1,
-}
+export declare type Errors = typeof Errors[keyof typeof Errors];
+
+
+const PermissionKinds = {
+  Steps: 0,
+  Distances: 1,
+  Calories: 2,
+  HeartRate: 3,
+  Activity: 4,
+  SleepAnalysis: 5,
+} as const;
+
+export declare type PermissionKinds = typeof PermissionKinds[keyof typeof PermissionKinds];
+
+const PermissionAccesses = {
+  Read: 0,
+  Write: 1,
+} as const;
+
+export declare type PermissionAccesses = typeof PermissionAccesses[keyof typeof PermissionAccesses];
+
 
 export declare type Permission = {
-  kind: PermissionKind,
-  access: PermissionAccess,
+  kind: PermissionKinds,
+  access: PermissionAccesses,
 }
 
 /**
@@ -41,7 +57,7 @@ export declare function requestPermissions(permissions: Permission[]): Promise<b
  */
 export declare type Interval = 'days' | 'hour' | 'minute'
 
-export declare interface StepsRequest {
+export declare interface Request {
   startDate: string
   endDate?: string
   interval?: Interval
@@ -53,8 +69,6 @@ export declare interface StepRecord {
   quantity: number
 }
 
-export declare type StepsResponse = StepRecord[]
-
 /**
  * Fetch steps on a given period of time. 
  * 
@@ -62,24 +76,16 @@ export declare type StepsResponse = StepRecord[]
  * If endDate is not provided, the current date will be used.
  * Set interval to decide how detailed the returned data is, set it to hour or minute otherwise it defaults to days.
  * 
- * @param request StepsRequest
- * @return Promise<StepsResponse>
+ * @param request Request
+ * @return Promise<StepRecord[]>
  */
-export declare function getSteps(request: StepsRequest): Promise<StepsResponse>
-
-export declare interface DistanceRequest {
-  startDate: string
-  endDate: string
-  interval: Interval
-}
+export declare function getSteps(request: Request): Promise<StepRecord[]>
 
 export declare interface DistanceRecord {
   startDate: string
   endDate: string
   quantity: number
 }
-
-export declare type DistanceResponse = DistanceRecord[]
 
 /**
  * Fetch distance in meters on a given period of time.
@@ -88,24 +94,16 @@ export declare type DistanceResponse = DistanceRecord[]
  * If endDate is not provided, the current date will be used.
  * Set interval to decide how detailed the returned data is, set it to hour or minute otherwise it defaults to days.
  * 
- * @param request DistanceRequest
- * @return Promise<DistanceResponse>
+ * @param request Request
+ * @return Promise<DistanceRecord[]>
  */
-export declare function getDistance(request: DistanceRequest): Promise<DistanceResponse>
+export declare function getDistances(request: Request): Promise<DistanceRecord[]>
 
-export declare interface CaloriesRequest {
-  startDate: string
-  endDate: string
-  interval: Interval
-}
-
-export declare interface CalorieRecord {
+export declare interface CaloriesRecord {
   startDate: string
   endDate: string
   quantity: number
 }
-
-export declare type CaloriesResponse = CalorieRecord[]
 
 /**
  * Fetch calories burnt in kilocalories on a given period of time.
@@ -114,24 +112,16 @@ export declare type CaloriesResponse = CalorieRecord[]
  * If endDate is not provided, the current date will be used.
  * Set interval to decide how detailed the returned data is, set it to hour or minute otherwise it defaults to days.
  * 
- * @param request CaloriesRequest
- * @return Promise<CaloriesResponse>
+ * @param request Request
+ * @return Promise<CalorieRecord[]>
  */
-export declare function getCalories(request: CaloriesRequest): Promise<CaloriesResponse>
-
-export declare interface HeartRateRequest {
-  startDate: string
-  endDate: string
-  interval: Interval
-}
+export declare function getCalories(request: Request): Promise<CaloriesRecord[]>
 
 export declare interface HeartRateRecord {
   startDate: string
   endDate: string
   quantity: number
 }
-
-export declare type HeartRateResponse = HeartRateRecord[]
 
 /**
  * Fetch heart rate bpm on a given period of time.
@@ -140,10 +130,10 @@ export declare type HeartRateResponse = HeartRateRecord[]
  * If endDate is not provided, the current date will be used.
  * Set interval to decide how detailed the returned data is, set it to hour or minute otherwise it defaults to days.
  * 
- * @param request HeartRateRequest
- * @return Promise<HeartRateResponse>
+ * @param request Request
+ * @return Promise<HeartRateRecord[]>
  */
-export declare function getHeartRate(request: HeartRateRequest): Promise<HeartRateResponse>
+export declare function getHeartRate(request: Request): Promise<HeartRateRecord[]>
 
 export declare interface SleepAnalysisRequest {
   startDate: string
@@ -158,8 +148,6 @@ export declare interface SleepAnalysisRecord {
   sourceId: string
 }
 
-export declare type SleepAnalysisResponse = SleepAnalysisRecord[]
-
 /**
  * Fetch sleep analysis data on a given period of time. 
  *
@@ -167,9 +155,9 @@ export declare type SleepAnalysisResponse = SleepAnalysisRecord[]
  * If startDate is not provided an error will be thrown.
  * 
  * @param request SleepAnalysisRequest
- * @return Promise<SleepAnalysisResponse>
+ * @return Promise<SleepAnalysisRecord[]>
  */
-export declare function getSleepAnalysis(request: SleepAnalysisRequest): Promise<SleepAnalysisResponse>
+export declare function getSleepAnalysis(request: SleepAnalysisRequest): Promise<SleepAnalysisRecord[]>
   
 /**
  * Available only on Android. 
