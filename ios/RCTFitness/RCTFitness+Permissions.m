@@ -13,9 +13,9 @@
 +(HKObjectType*)getQuantityType:(RCTFitnessPermissionKind)permission
 {
     switch (permission) {
-        case STEP:
+        case STEPS:
              return [HKObjectType quantityTypeForIdentifier: HKQuantityTypeIdentifierStepCount];
-        case DISTANCE:
+        case DISTANCES:
              return [HKObjectType quantityTypeForIdentifier: HKQuantityTypeIdentifierDistanceWalkingRunning];
         case ACTIVITY:
                 return nil;

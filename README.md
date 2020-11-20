@@ -67,7 +67,7 @@ In order to make it run, it is necessary to turn on `Health Kit` in the `Capabil
 import Fitness from '@ovalmoney/react-native-fitness';
 
 const permissions = [
-  { kind: Fitness.PermissionKind.Step, access: Fitness.PermissionAccess.Write },
+  { kind: Fitness.PermissionKinds.Steps, access: Fitness.PermissionAccesses.Write },
 ];
 
 Fitness.isAuthorized(permissions)
@@ -83,19 +83,19 @@ Fitness.isAuthorized(permissions)
 - **Fitness.isAuthorized([{ kind: int, access: int }])**
 Check if permissions are granted or not. It works on Android and iOS >= 12.0, while it returns an error when iOS < 12.
 It requires an `Array` of `Object` with a mandatory key `kind` and an optional key `access`.
-Possible values for the keys can be found in `PermissionKind` and `PermissionAccess` under `Attributes` section.
+Possible values for the keys can be found in `PermissionKinds` and `PermissionAccesses` under `Attributes` section.
 On iOS at least one permissions with `Read` access must be provided, otherwise an `errorEmptyPermissions` will be thrown.
 
 - **Fitness.requestPermissions([{ kind: int, access: int }])**
 Ask permission and return if user granted or not(Android), while, due to Apple's privacy model, always true is returned in iOS.
 It requires an `Array` of `Object` with a mandatory key `kind` and an optional key `access`.
-Possible values for the keys can be found in `PermissionKind` and `PermissionAccess` under `Attributes` section.
+Possible values for the keys can be found in `PermissionKinds` and `PermissionAccesses` under `Attributes` section.
 On iOS at least one permissions with `Read` access must be provided, otherwise an `errorEmptyPermissions` will be thrown.
 
 - **Fitness.getSteps({ startDate: string, endDate: string, interval: string })**
 Fetch steps on a given period of time. It requires an `Object` with `startDate` and `endDate` attributes as string. If startDate is not provided an error will be thrown. Set `interval` to decide how detailed the returned data is, set it to `hour` or `minute` otherwise it defaults to `days`.
 
-- **Fitness.getDistance({ startDate: string, endDate: string, interval: string })**
+- **Fitness.getDistances({ startDate: string, endDate: string, interval: string })**
 Fetch distance in meters on a given period of time. It requires an `Object` with `startDate` and `endDate` attributes as string. If startDate is not provided an error will be thrown. Set `interval` to decide how detailed the returned data is, set it to `hour` or `minute` otherwise it defaults to `days`.
 
 - **Fitness.getCalories({ startDate: string, endDate: string, interval: string })**
@@ -120,31 +120,36 @@ Call this function to get steps and eliminate the need to have Google Fit instal
 #### Platform
 Return the used provider.
 
-#### PermissionKind
+#### PermissionKinds
 Return the information of what kind of Permission can be asked.
 At the moment the list of possible kinds is:
- - ***Step***: to required the access for `Step`
- - ***Distance***: to required the access for `Distances`
+ - ***Steps***: to required the access for `Steps`
+ - ***Distances***: to required the access for `Distances`
  - ***Calories***: to required the access for `Calories`
  - ***HeartRate***: to required the access for `Heart rate`
  - ***Activity***: to required the access for `Activity` (only Android)
  - ***SleepAnalysis***: to required the access for `Sleep Analysis`
 
 
-#### PermissionAccess
+#### PermissionAccesses
 Return the information of what kind of Access can be asked.
 The list of possible kinds is:
  - ***Read***: to required the access to `Read`
  - ***Write***: to required the access to `Write`
 
-#### Error (iOS only)
+#### Errors
 Return the list of meaningful errors that can be possible thrown.
-On Android it is an empty object.
+
+##### iOS
 Possible values are:
  - ***hkNotAvailable***: thrown if HealthKit is not available
  - ***methodNotAvailable***: thrown if `isAuthorized` is called on iOS < 12.0
- -  ***dateNotCorrect***: thrown if received date is not correct
+ - ***dateNotCorrect***: thrown if received date is not correct
  - ***errorEmptyPermissions***: thrown if no read permissions are provided
  - ***errorNoEvents***: thrown if an error occurs while try to retrieve data
+
+##### Android
+Possible values are:
+ - ***methodNotAvailable***: thrown if `getSleepAnalysis` is called on Android less than N
 
 

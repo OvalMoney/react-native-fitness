@@ -50,12 +50,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static com.ovalmoney.fitness.permission.Permission.ACTIVITY;
-import static com.ovalmoney.fitness.permission.Permission.CALORIES;
-import static com.ovalmoney.fitness.permission.Permission.DISTANCE;
-import static com.ovalmoney.fitness.permission.Permission.STEP;
-import static com.ovalmoney.fitness.permission.Permission.HEART_RATE;
-import static com.ovalmoney.fitness.permission.Permission.SLEEP_ANALYSIS;
+import static com.ovalmoney.fitness.permission.Permissions.ACTIVITY;
+import static com.ovalmoney.fitness.permission.Permissions.CALORIES;
+import static com.ovalmoney.fitness.permission.Permissions.DISTANCES;
+import static com.ovalmoney.fitness.permission.Permissions.STEPS;
+import static com.ovalmoney.fitness.permission.Permissions.HEART_RATE;
+import static com.ovalmoney.fitness.permission.Permissions.SLEEP_ANALYSIS;
 
 public class Manager implements ActivityEventListener {
 
@@ -92,12 +92,12 @@ public class Manager implements ActivityEventListener {
         for(int i = 0; i < length; i++){
             Request currentRequest = permissions.get(i);
             switch(currentRequest.permissionKind){
-                case STEP:
+                case STEPS:
                     fitnessOptions
                             .addDataType(DataType.TYPE_STEP_COUNT_DELTA, currentRequest.permissionAccess)
                             .addDataType(DataType.TYPE_STEP_COUNT_CUMULATIVE, currentRequest.permissionAccess);
                     break;
-                case DISTANCE:
+                case DISTANCES:
                     fitnessOptions.addDataType(DataType.TYPE_DISTANCE_DELTA, currentRequest.permissionAccess);
                     break;
                 case CALORIES:
