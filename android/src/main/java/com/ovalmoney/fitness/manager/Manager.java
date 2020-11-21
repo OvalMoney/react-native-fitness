@@ -38,7 +38,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.fitness.data.Subscription;
 import com.ovalmoney.fitness.permission.Request;
 
 import java.text.DateFormat;
@@ -109,6 +108,7 @@ public class Manager implements ActivityEventListener {
                 case HEART_RATE:
                     fitnessOptions.addDataType(DataType.TYPE_HEART_RATE_BPM, currentRequest.permissionAccess);
                     break;
+                case SLEEP_ANALYSIS:
                 default:
                     break;
             }
