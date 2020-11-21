@@ -64,7 +64,6 @@ public class Manager implements ActivityEventListener {
     private final static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault());
 
     private Promise promise;
-    private FitnessOptions fitnessOptions;
 
     private static boolean isGooglePlayServicesAvailable(final Activity activity) {
         GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
@@ -120,9 +119,9 @@ public class Manager implements ActivityEventListener {
 
     public boolean isAuthorized(final Activity activity, final ArrayList<Request> permissions){
         if(isGooglePlayServicesAvailable(activity)) {
-            this.fitnessOptions = addPermissionToFitnessOptions(FitnessOptions.builder(), permissions)
+            final FitnessOptions fitnessOptions = addPermissionToFitnessOptions(FitnessOptions.builder(), permissions)
                     .build();
-            return GoogleSignIn.hasPermissions(GoogleSignIn.getLastSignedInAccount(activity), this.fitnessOptions);
+            return GoogleSignIn.hasPermissions(GoogleSignIn.getLastSignedInAccount(activity), fitnessOptions);
         }
         return false;
     }
