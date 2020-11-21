@@ -8,7 +8,6 @@ const Errors = {
 
 export declare type Errors = typeof Errors[keyof typeof Errors];
 
-
 const PermissionKinds = {
   Steps: 0,
   Distances: 1,
@@ -49,6 +48,20 @@ export declare function isAuthorized(permissions: Permission[]): Promise<boolean
  * @return Promise<boolean>
  */
 export declare function requestPermissions(permissions: Permission[]): Promise<boolean>
+
+/**
+ * Disconnect from Google Fit. 
+ * 
+ * @return Promise<boolean>
+ */
+export declare function disconnect(): Promise<boolean>
+
+/**
+ * Log out from Google account. 
+ * 
+ * @return Promise<boolean>
+ */
+export declare function logout(): Promise<boolean>
 
 /**
  * Data interval.

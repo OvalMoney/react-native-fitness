@@ -92,6 +92,14 @@ It requires an `Array` of `Object` with a mandatory key `kind` and an optional k
 Possible values for the keys can be found in `PermissionKinds` and `PermissionAccesses` under `Attributes` section.
 On iOS at least one permissions with `Read` access must be provided, otherwise an `errorEmptyPermissions` will be thrown.
 
+- **Fitness.logout()**
+Available only on android. It performs a logout from google account.
+It returns `true` for a successful logout, `false` if user cancel action.
+
+- **Fitness.disconnect()**
+Available only on android. It performs a disconnect action from Google Fit.
+It returns `true` for a successful logout, `false` if user cancel action.
+
 - **Fitness.getSteps({ startDate: string, endDate: string, interval: string })**
 Fetch steps on a given period of time. It requires an `Object` with `startDate` and `endDate` attributes as string. If startDate is not provided an error will be thrown. Set `interval` to decide how detailed the returned data is, set it to `hour` or `minute` otherwise it defaults to `days`.
 
