@@ -155,7 +155,7 @@ public class Manager implements ActivityEventListener {
     public void logout(@NonNull Activity currentActivity, final Promise promise) {
         final GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build();
         GoogleSignIn.getClient(currentActivity, gso)
-            .signOut()
+            .revokeAccess()
             .addOnCanceledListener(new OnCanceledListener() {
             @Override
             public void onCanceled() {
