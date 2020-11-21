@@ -12,6 +12,7 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
             Permissions.DISTANCES,
             Permissions.ACTIVITY,
             Permissions.CALORIES,
+            Permissions.HEART_RATE,
             Permissions.SLEEP_ANALYSIS,
     })
 
