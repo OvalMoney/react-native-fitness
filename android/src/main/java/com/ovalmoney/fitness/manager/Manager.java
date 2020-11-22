@@ -3,9 +3,7 @@ package com.ovalmoney.fitness.manager;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Build;
-import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -18,6 +16,7 @@ import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.fitness.Fitness;
@@ -37,8 +36,8 @@ import com.google.android.gms.fitness.result.SessionReadResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.fitness.data.Subscription;
 import com.ovalmoney.fitness.permission.Request;
 
 import java.text.DateFormat;
@@ -50,12 +49,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static com.ovalmoney.fitness.permission.Permission.ACTIVITY;
-import static com.ovalmoney.fitness.permission.Permission.CALORIES;
-import static com.ovalmoney.fitness.permission.Permission.DISTANCE;
-import static com.ovalmoney.fitness.permission.Permission.STEP;
-import static com.ovalmoney.fitness.permission.Permission.HEART_RATE;
-import static com.ovalmoney.fitness.permission.Permission.SLEEP_ANALYSIS;
+import static com.ovalmoney.fitness.permission.Permissions.ACTIVITY;
+import static com.ovalmoney.fitness.permission.Permissions.CALORIES;
+import static com.ovalmoney.fitness.permission.Permissions.DISTANCES;
+import static com.ovalmoney.fitness.permission.Permissions.STEPS;
+import static com.ovalmoney.fitness.permission.Permissions.HEART_RATE;
+import static com.ovalmoney.fitness.permission.Permissions.SLEEP_ANALYSIS;
 
 public class Manager implements ActivityEventListener {
 
@@ -92,12 +91,12 @@ public class Manager implements ActivityEventListener {
         for(int i = 0; i < length; i++){
             Request currentRequest = permissions.get(i);
             switch(currentRequest.permissionKind){
-                case STEP:
+                case STEPS:
                     fitnessOptions
                             .addDataType(DataType.TYPE_STEP_COUNT_DELTA, currentRequest.permissionAccess)
                             .addDataType(DataType.TYPE_STEP_COUNT_CUMULATIVE, currentRequest.permissionAccess);
                     break;
-                case DISTANCE:
+                case DISTANCES:
                     fitnessOptions.addDataType(DataType.TYPE_DISTANCE_DELTA, currentRequest.permissionAccess);
                     break;
                 case CALORIES:
@@ -109,6 +108,7 @@ public class Manager implements ActivityEventListener {
                 case HEART_RATE:
                     fitnessOptions.addDataType(DataType.TYPE_HEART_RATE_BPM, currentRequest.permissionAccess);
                     break;
+                case SLEEP_ANALYSIS:
                 default:
                     break;
             }
@@ -119,7 +119,7 @@ public class Manager implements ActivityEventListener {
 
     public boolean isAuthorized(final Activity activity, final ArrayList<Request> permissions){
         if(isGooglePlayServicesAvailable(activity)) {
-            FitnessOptions fitnessOptions = addPermissionToFitnessOptions(FitnessOptions.builder(), permissions)
+            final FitnessOptions fitnessOptions = addPermissionToFitnessOptions(FitnessOptions.builder(), permissions)
                     .build();
             return GoogleSignIn.hasPermissions(GoogleSignIn.getLastSignedInAccount(activity), fitnessOptions);
         }
@@ -149,6 +149,63 @@ public class Manager implements ActivityEventListener {
         if (resultCode == Activity.RESULT_CANCELED && requestCode == GOOGLE_FIT_PERMISSIONS_REQUEST_CODE) {
             promise.resolve(false);
         }
+    }
+
+
+    public void logout(@NonNull Activity currentActivity, final Promise promise) {
+        final GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build();
+        GoogleSignIn.getClient(currentActivity, gso)
+            .revokeAccess()
+            .addOnCanceledListener(new OnCanceledListener() {
+            @Override
+            public void onCanceled() {
+                promise.resolve(false);
+            }
+            })
+            .addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                promise.resolve(true);
+            }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                promise.reject(e);
+            }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                promise.reject(e);
+            }
+        });
+        }
+
+    public void disconnect(@NonNull Activity currentActivity, final Promise promise) {
+        Fitness.getConfigClient(
+            currentActivity,
+            GoogleSignIn.getLastSignedInAccount(currentActivity.getApplicationContext()
+            ))
+          .disableFit()
+          .addOnCanceledListener(new OnCanceledListener() {
+            @Override
+            public void onCanceled() {
+              promise.resolve(false);
+            }
+          })
+          .addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+              promise.resolve(true);
+            }
+          })
+          .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+              promise.reject(e);
+            }
+          });
     }
 
     @Override

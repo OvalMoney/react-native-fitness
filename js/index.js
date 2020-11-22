@@ -1,4 +1,22 @@
-import { NativeModules } from "react-native";
+import { NativeModules, Platform } from "react-native";
+
+/**
+ * Log out from Google Account
+ * @returns {*}
+ */
+const logout = Platform.select({
+  ios: () => null,
+  android: () => NativeModules.Fitness.logout(),
+});
+
+/**
+ * Disconnect Google Fit
+ * @returns {*}
+ */
+const disconnect = Platform.select({
+  ios: () => null,
+  android: () => NativeModules.Fitness.disconnect(),
+});
 
 /**
  * Get native getStep with parsed Dates
@@ -85,6 +103,8 @@ const parseDate = date => {
 
 export default {
   ...NativeModules.Fitness,
+  logout,
+  disconnect,
   getSteps,
   getDistance,
   getCalories,

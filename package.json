@@ -1,6 +1,6 @@
 {
   "name": "@ovalmoney/react-native-fitness",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "A React Native package that gives you access to Apple kit and Google Fit data.",
   "main": "./js/index.js",
   "keywords": [
@@ -16,18 +16,6 @@
     {
       "name": "Francesco Voto",
       "email": "fv@ovalmoney.com"
-    },
-    {
-      "name": "Andrea Pacino",
-      "email": "ap@ovalmoney.com"
-    },
-    {
-      "name": "Stefano Cerelli",
-      "email": "stefano.cerelli@ovalmoney.com"
-    },
-    {
-      "name": "Alessio Occhipinti",
-      "email": "alessio.occhipinti@ovalmoney.com"
     }
   ],
   "license": "MIT",
