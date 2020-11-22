@@ -59,7 +59,13 @@ In order to make it run, it is necessary to turn on `Health Kit` in the `Capabil
   	```java
     compile project(':@ovalmoney_react-native-fitness')
   	```
-
+5. (Optional) In order to better handle the right versions, add in your `android/build.gradle`:
+  	```ext {
+      // Other build versions
+      fitnessPlayServices: "<Your version>" // default: 17.0.0
+      authPlayServices: "<Your version>" // default: 17.0.0
+    }
+  	```
 
 ## Usage
 
