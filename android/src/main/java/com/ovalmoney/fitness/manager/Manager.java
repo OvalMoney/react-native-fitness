@@ -272,6 +272,8 @@ public class Manager implements ActivityEventListener {
                 .setTimeRange((long) startDate, (long) endDate, TimeUnit.MILLISECONDS)
                 .build();
 
+
+
         Fitness.getHistoryClient(context, GoogleSignIn.getLastSignedInAccount(context))
                 .readData(readRequest)
                 .addOnSuccessListener(new OnSuccessListener<DataReadResponse>() {
@@ -279,10 +281,26 @@ public class Manager implements ActivityEventListener {
                     public void onSuccess(DataReadResponse dataReadResponse) {
                         if (dataReadResponse.getBuckets().size() > 0) {
                             WritableArray steps = Arguments.createArray();
+
                             for (Bucket bucket : dataReadResponse.getBuckets()) {
+
                                 List<DataSet> dataSets = bucket.getDataSets();
                                 for (DataSet dataSet : dataSets) {
-                                    processStep(dataSet, steps);
+                                    boolean canSave = true;
+                                    Log.d("DATASET", dataSets.toString());
+                                    for (DataPoint dp : dataSet.getDataPoints()) {
+                                        for(Field field : dp.getDataType().getFields()) {
+                                            if ("user_input".equals(dp.getOriginalDataSource().getStreamName())){
+                                                canSave = false;
+                                            }
+                                            Log.d("USER_INPUT_SET", dataSet.toString());
+                                            Log.d("USER_INPUT_STEPS", steps.toString());
+                                        }
+                                    }
+                                    if(canSave){
+                                        processStep(dataSet, steps);
+                                    }
+
                                 }
                             }
                             promise.resolve(steps);
