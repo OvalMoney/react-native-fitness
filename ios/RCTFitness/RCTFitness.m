@@ -223,7 +223,7 @@ RCT_REMAP_METHOD(getSteps,
     [self.healthStore executeQuery:query];
 }
 
-RCT_REMAP_METHOD(getDistance,
+RCT_REMAP_METHOD(getDistances,
                  withStartDate: (double) startDate
                  andEndDate: (double) endDate
                  andInterval: (NSString *) customInterval

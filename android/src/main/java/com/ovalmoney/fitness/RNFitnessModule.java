@@ -153,9 +153,9 @@ public class RNFitnessModule extends ReactContextBaseJavaModule{
   }
 
   @ReactMethod
-  public void getDistance(double startDate, double endDate, String interval, Promise promise){
+  public void getDistances(double startDate, double endDate, String interval, Promise promise){
     try {
-      manager.getDistance(getCurrentActivity(), startDate, endDate, interval, promise);
+      manager.getDistances(getCurrentActivity(), startDate, endDate, interval, promise);
     }catch(Error e){
       promise.reject(e);
     }

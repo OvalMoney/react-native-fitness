@@ -32,13 +32,13 @@ const getSteps = ({ startDate, endDate, interval = "days" }) =>
   );
 
 /**
- * Get native getDistance with parsed Dates
+ * Get native getDistances with parsed Dates
  * @param startDate
  * @param endDate
  * @returns {*}
  */
-const getDistance = ({ startDate, endDate, interval = "days" }) =>
-  NativeModules.Fitness.getDistance(
+const getDistances = ({ startDate, endDate, interval = "days" }) =>
+  NativeModules.Fitness.getDistances(
     parseDate(startDate),
     parseDate(endDate),
     interval
@@ -106,7 +106,7 @@ export default {
   logout,
   disconnect,
   getSteps,
-  getDistance,
+  getDistances,
   getCalories,
   getHeartRate,
   getSleepAnalysis,
