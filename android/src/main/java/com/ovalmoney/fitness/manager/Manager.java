@@ -302,7 +302,7 @@ public class Manager implements ActivityEventListener {
                 });
     }
 
-    public void getDistance(Context context, double startDate, double endDate, String customInterval, final Promise promise) {
+    public void getDistances(Context context, double startDate, double endDate, String customInterval, final Promise promise) {
         TimeUnit interval = getInterval(customInterval);
 
         DataReadRequest readRequest = new DataReadRequest.Builder()
