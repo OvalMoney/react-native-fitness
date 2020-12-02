@@ -178,12 +178,9 @@ public class Manager implements ActivityEventListener {
         }
 
     public void disconnect(@NonNull Activity currentActivity, final Promise promise) {
-        final GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build();
-
         Fitness.getConfigClient(
             currentActivity,
-            GoogleSignIn.getLastSignedInAccount(currentActivity.getApplicationContext())
-        )
+            GoogleSignIn.getLastSignedInAccount(currentActivity.getApplicationContext()))
           .disableFit()
           .addOnCanceledListener(new OnCanceledListener() {
             @Override
