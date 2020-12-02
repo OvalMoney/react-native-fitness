@@ -14,11 +14,16 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInApi;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.fitness.Fitness;
 import com.google.android.gms.fitness.FitnessActivities;
 import com.google.android.gms.fitness.FitnessOptions;
@@ -141,16 +146,6 @@ public class Manager implements ActivityEventListener {
         }
     }
 
-    @Override
-    public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK && requestCode == GOOGLE_FIT_PERMISSIONS_REQUEST_CODE) {
-            promise.resolve(true);
-        }
-        if (resultCode == Activity.RESULT_CANCELED && requestCode == GOOGLE_FIT_PERMISSIONS_REQUEST_CODE) {
-            promise.resolve(false);
-        }
-    }
-
 
     public void logout(@NonNull Activity currentActivity, final Promise promise) {
         final GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build();
@@ -183,10 +178,12 @@ public class Manager implements ActivityEventListener {
         }
 
     public void disconnect(@NonNull Activity currentActivity, final Promise promise) {
+        final GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build();
+
         Fitness.getConfigClient(
             currentActivity,
-            GoogleSignIn.getLastSignedInAccount(currentActivity.getApplicationContext()
-            ))
+            GoogleSignIn.getLastSignedInAccount(currentActivity.getApplicationContext())
+        )
           .disableFit()
           .addOnCanceledListener(new OnCanceledListener() {
             @Override
@@ -206,10 +203,39 @@ public class Manager implements ActivityEventListener {
               promise.reject(e);
             }
           });
+
+
     }
 
-    @Override
-    public void onNewIntent(Intent intent) { }
+    public void googleLogout(@NonNull Activity currentActivity, final Promise promise){
+        final GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build();
+        GoogleSignIn.getClient(currentActivity, gso)
+                .signOut()
+                .addOnCanceledListener(new OnCanceledListener() {
+                    @Override
+                    public void onCanceled() {
+                        promise.resolve(false);
+                    }
+                })
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        promise.resolve(true);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        promise.reject(e);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        promise.reject(e);
+                    }
+                });
+    }
 
     public void subscribeToActivity(Context context, final Promise promise){
         final GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(context);
@@ -554,6 +580,26 @@ public class Manager implements ActivityEventListener {
                 sleepMap.putString("endDate", dateFormat.format(dp.getEndTime(TimeUnit.MILLISECONDS)));
                 map.pushMap(sleepMap);
             }
+        }
+    }
+
+    @Override
+    public void onNewIntent (Intent intent) {
+
+    }
+
+    @Override
+    public void  onActivityResult(Activity activity,int per1,int per2, Intent intent)  {
+
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) { {
+        if (resultCode == Activity.RESULT_OK && requestCode == GOOGLE_FIT_PERMISSIONS_REQUEST_CODE) {
+            promise.resolve(true);
+        }
+        if (resultCode == Activity.RESULT_CANCELED && requestCode == GOOGLE_FIT_PERMISSIONS_REQUEST_CODE) {
+            promise.resolve(false);
+        }
         }
     }
 }
