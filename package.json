@@ -1,6 +1,6 @@
 {
   "name": "@ovalmoney/react-native-fitness",
-  "version": "0.5.0",
+  "version": "0.6.1",
   "description": "A React Native package that gives you access to Apple kit and Google Fit data.",
   "main": "./js/index.js",
   "keywords": [
