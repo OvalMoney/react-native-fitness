@@ -15,5 +15,5 @@ Pod::Spec.new do |s|
   s.source       = { :git => "git@github.com:OvalMoney/react-native-fitness.git", :tag => "master" }
   s.source_files  = "ios/RCTFitness/**/*.{h,m}"
 
-  s.dependency 'React'
+  s.dependency 'React-Core'
 end
