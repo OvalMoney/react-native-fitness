@@ -1,3 +1,5 @@
+export const Platform = 'AppleHealth' | 'GoogleFit';
+
 const Errors = {
   ErrorHKNotAvailable: -100,
   ErrorMethodNotAvailable: -99,
@@ -25,7 +27,6 @@ const PermissionAccesses = {
 } as const;
 
 export declare type PermissionAccesses = typeof PermissionAccesses[keyof typeof PermissionAccesses];
-
 
 export declare type Permission = {
   kind: PermissionKinds,
