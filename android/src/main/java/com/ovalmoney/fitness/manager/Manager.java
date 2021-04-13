@@ -211,29 +211,6 @@ public class Manager implements ActivityEventListener {
     @Override
     public void onNewIntent(Intent intent) { }
 
-    public void subscribeToActivity(Context context, final Promise promise){
-        final GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(context);
-        if(account == null){
-            promise.resolve(false);
-            return;
-        }
-        Fitness.getRecordingClient(context, account)
-                .subscribe(DataType.TYPE_ACTIVITY_SAMPLES)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        promise.resolve(true);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        promise.resolve(false);
-                    }
-                });
-
-    }
-
     public void subscribeToSteps(Context context, final Promise promise){
         final GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(context);
         if(account == null){
