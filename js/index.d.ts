@@ -172,15 +172,6 @@ export declare interface SleepAnalysisRecord {
  * @return Promise<SleepAnalysisRecord[]>
  */
 export declare function getSleepAnalysis(request: SleepAnalysisRequest): Promise<SleepAnalysisRecord[]>
-  
-/**
- * Available only on Android. 
- * 
- * Subscribe to all Google Fit activities.
- * 
- * @return Promise<boolean>
- */
-export declare function subscribeToActivity(): Promise<boolean>
 
 /**
  * Available only on Android. 
