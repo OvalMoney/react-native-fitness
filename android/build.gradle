@@ -30,5 +30,5 @@ repositories {
 dependencies {
     implementation 'com.facebook.react:react-native:+'
     implementation "com.google.android.gms:play-services-fitness:${safeExtGet('fitnessPlayServices', '20.0.0')}"
-    implementation "com.google.android.gms:play-services-auth:${safeExtGet('authPlayServices', '17.0.0')}"
+    implementation "com.google.android.gms:play-services-auth:${safeExtGet('authPlayServices', '19.0.0')}"
 }
