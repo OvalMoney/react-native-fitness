@@ -337,7 +337,7 @@ public class Manager implements ActivityEventListener {
                             for (Bucket bucket : dataReadResponse.getBuckets()) {
                                 List<DataSet> dataSets = bucket.getDataSets();
                                 for (DataSet dataSet : dataSets) {
-                                    processDistance(dataSet, calories);
+                                    processCalories(dataSet, calories);
                                 }
                             }
                             promise.resolve(calories);
@@ -402,7 +402,7 @@ public class Manager implements ActivityEventListener {
             promise.reject(String.valueOf(FitnessError.ERROR_METHOD_NOT_AVAILABLE), "Method not available");
             return;
         }
-        
+
         SessionReadRequest request = new SessionReadRequest.Builder()
                 .readSessionsFromAllApps()
                 .read(DataType.TYPE_ACTIVITY_SEGMENT)
@@ -425,10 +425,8 @@ public class Manager implements ActivityEventListener {
                             .collect(Collectors.toList());
 
                         WritableArray sleep = Arguments.createArray();
-
                         for (Object session : sleepSessions) {
                             List<DataSet> dataSets = response.getDataSet((Session) session);
-
                             for (DataSet dataSet : dataSets) {
                                 processSleep(dataSet, (Session) session, sleep);
                             }
@@ -447,10 +445,9 @@ public class Manager implements ActivityEventListener {
 
     private void processStep(DataSet dataSet, WritableArray map) {
 
-        WritableMap stepMap = Arguments.createMap();
-
         for (DataPoint dp : dataSet.getDataPoints()) {
             for(Field field : dp.getDataType().getFields()) {
+                WritableMap stepMap = Arguments.createMap();
                 stepMap.putString("startDate", dateFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS)));
                 stepMap.putString("endDate", dateFormat.format(dp.getEndTime(TimeUnit.MILLISECONDS)));
                 stepMap.putDouble("quantity", dp.getValue(field).asInt());
@@ -461,10 +458,9 @@ public class Manager implements ActivityEventListener {
 
     private void processDistance(DataSet dataSet, WritableArray map) {
 
-        WritableMap distanceMap = Arguments.createMap();
-
         for (DataPoint dp : dataSet.getDataPoints()) {
             for(Field field : dp.getDataType().getFields()) {
+                WritableMap distanceMap = Arguments.createMap();
                 distanceMap.putString("startDate", dateFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS)));
                 distanceMap.putString("endDate", dateFormat.format(dp.getEndTime(TimeUnit.MILLISECONDS)));
                 distanceMap.putDouble("quantity", dp.getValue(field).asFloat());
@@ -475,10 +471,9 @@ public class Manager implements ActivityEventListener {
 
     private void processCalories(DataSet dataSet, WritableArray map) {
 
-        WritableMap caloryMap = Arguments.createMap();
-
         for (DataPoint dp : dataSet.getDataPoints()) {
             for(Field field : dp.getDataType().getFields()) {
+                WritableMap caloryMap = Arguments.createMap();
                 caloryMap.putString("startDate", dateFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS)));
                 caloryMap.putString("endDate", dateFormat.format(dp.getEndTime(TimeUnit.MILLISECONDS)));
                 caloryMap.putDouble("quantity", dp.getValue(field).asFloat());
@@ -489,10 +484,9 @@ public class Manager implements ActivityEventListener {
 
     private void processHeartRate(DataSet dataSet, WritableArray map) {
 
-        WritableMap heartRateMap = Arguments.createMap();
-
         for (DataPoint dp : dataSet.getDataPoints()) {
             for(Field field : dp.getDataType().getFields()) {
+                WritableMap heartRateMap = Arguments.createMap();
                 heartRateMap.putString("startDate", dateFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS)));
                 heartRateMap.putString("endDate", dateFormat.format(dp.getEndTime(TimeUnit.MILLISECONDS)));
                 heartRateMap.putDouble("quantity", dp.getValue(field).asFloat());
@@ -503,10 +497,9 @@ public class Manager implements ActivityEventListener {
 
     private void processSleep(DataSet dataSet, Session session, WritableArray map) {
 
-        WritableMap sleepMap = Arguments.createMap();
-
         for (DataPoint dp : dataSet.getDataPoints()) {
             for(Field field : dp.getDataType().getFields()) {
+                WritableMap sleepMap = Arguments.createMap();
                 sleepMap.putString("value", dp.getValue(field).asActivity());
                 sleepMap.putString("sourceId", session.getIdentifier());
                 sleepMap.putString("startDate", dateFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS)));
