@@ -28,9 +28,23 @@
     "!/android/build",
     "/ios",
     "/js",
-    "/*.podspec"
+    "/*.podspec",
+    "app.plugin.js",
+    "/plugin"
   ],
   "peerDependencies": {
     "react-native": ">=0.41.2"
+  },
+  "dependencies": {
+    "@expo/config-plugins": "^2.0.3"
+  },
+  "devDependencies": {
+    "expo-module-scripts": "^2.0.0"
+  },
+  "scripts": {
+    "build:plugin": "tsc --build plugin",
+    "clean:plugin": "expo-module clean plugin",
+    "lint:plugin": "eslint plugin/src/*",
+    "prepare": "yarn clean:plugin && yarn build:plugin"
   }
 }

@@ -67,6 +67,22 @@ In order to make it run, it is necessary to turn on `Health Kit` in the `Capabil
     }
   	```
 
+
+## Using with Expo
+
+If you're using a managed Expo project you can add this plugin for use with `expo prebuild` and `expo run:[android/ios]`. Just add the plugin to your `app.json`/`app.config.js` e.g.
+
+    ```plugins: [
+        [
+            "@ovalmoney/react-native-fitness",
+            {
+                healthShareUsageDescription:
+                    "Your description here"
+            }
+        ]
+    ]
+    ```
+
 ## Usage
 
 ```javascript
