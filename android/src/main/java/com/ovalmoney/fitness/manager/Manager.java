@@ -41,6 +41,7 @@ import com.google.android.gms.tasks.Task;
 import com.ovalmoney.fitness.permission.Request;
 
 import java.text.DateFormat;
+import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -112,10 +113,10 @@ public class Manager implements ActivityEventListener {
                     fitnessOptions.addDataType(DataType.TYPE_HEART_RATE_BPM, currentRequest.permissionAccess);
                     break;
                 case WEIGHT:
-                    fitnessOptions.addDataType(DataType.WEIGHT, currentRequest.permissionAccess);
+                    fitnessOptions.addDataType(DataType.TYPE_WEIGHT, currentRequest.permissionAccess);
                     break;
                 case HEIGHT:
-                    fitnessOptions.addDataType(DataType.HEIGHT, currentRequest.permissionAccess);
+                    fitnessOptions.addDataType(DataType.TYPE_HEIGHT, currentRequest.permissionAccess);
                     break;
                 case SLEEP_ANALYSIS:
                 default:

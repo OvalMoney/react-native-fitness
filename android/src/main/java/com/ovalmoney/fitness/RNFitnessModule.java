@@ -35,8 +35,8 @@ public class RNFitnessModule extends ReactContextBaseJavaModule{
   private final static String DISTANCES_KEY = "Distances";
   private final static String HEART_RATE_KEY = "HeartRate";
   private final static String SLEEP_ANALYSIS_KEY = "SleepAnalysis";
-  private final static String SLEEP_ANALYSIS_KEY = "Weight";
-  private final static String SLEEP_ANALYSIS_KEY = "Height";
+  private final static String WEIGHT_KEY = "Weight";
+  private final static String HEIGHT_KEY = "Height";
 
   private final static String ACCESS_TYPE_KEY = "PermissionAccesses";
 
@@ -166,9 +166,9 @@ public class RNFitnessModule extends ReactContextBaseJavaModule{
   }
   
    @ReactMethod
-  public void getWidthAndHeight(Context context, Promise promise){
+  public void getWeightAndHeight(Promise promise){
     try {
-      manager.getWidthAndHeight(getCurrentActivity(), promise);
+      manager.getWeightAndHeight(getCurrentActivity(), promise);
     }catch(Error e){
       promise.reject(e);
     }
