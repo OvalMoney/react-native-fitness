@@ -14,6 +14,8 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
             Permissions.CALORIES,
             Permissions.HEART_RATE,
             Permissions.SLEEP_ANALYSIS,
+            Permissions.WEIGHT,
+            Permissions.HEIGHT,
     })
 
     public @interface Permissions {
@@ -23,5 +25,7 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
         int CALORIES = 3;
         int HEART_RATE = 4;
         int SLEEP_ANALYSIS = 5;
+        int WEIGHT = 6;
+        int HEIGHT = 7;
     }
 

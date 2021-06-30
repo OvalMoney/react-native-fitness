@@ -58,6 +58,13 @@ const getCalories = ({ startDate, endDate, interval = "days" }) =>
     interval
   );
 
+  /**
+ * Get Weight and Height from google fit
+ * @returns {*}
+ */
+const getWeightAndHeight = () =>
+NativeModules.Fitness.getWeightAndHeight();
+
 /**
  * Get native getHeartRate with parsed Dates
  * @param startDate
@@ -110,4 +117,5 @@ export default {
   getCalories,
   getHeartRate,
   getSleepAnalysis,
+  getWeightAndHeight
 };
