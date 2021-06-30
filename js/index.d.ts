@@ -145,6 +145,23 @@ export declare interface WeightAndHeightRecord {
  */
  export declare function getWeightAndHeight(): Promise<WeightAndHeightRecord[]>
 
+ export declare interface SubmitWorkoutRequest {
+  name: string,
+  workoutType: string,
+  startTime: string,
+  endTime: string,
+  calories: number,
+  distance: number
+}
+
+/**
+ * Insert workout into google fit
+ * 
+ * @param request SubmitWorkoutRequest
+ * @return Promise<void>
+ */
+ export declare function submitWorkout(request: SubmitWorkoutRequest): Promise<void>
+
 export declare interface HeartRateRecord {
   startDate: string
   endDate: string

@@ -175,6 +175,15 @@ public class RNFitnessModule extends ReactContextBaseJavaModule{
   }
 
   @ReactMethod
+  public void submitWorkout(String name, String wokoutType, double startTime, double endTime, float calories, float distance, Promise promise){
+    try {
+      manager.submitWorkout(getCurrentActivity(), name, wokoutType, startTime, endTime, calories, distance, promise);
+    }catch(Error e){
+      promise.reject(e);
+    }
+  }
+
+  @ReactMethod
   public void getHeartRate(double startDate, double endDate, String interval, Promise promise){
     try {
       manager.getHeartRate(getCurrentActivity(), startDate, endDate, interval, promise);

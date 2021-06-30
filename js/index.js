@@ -58,12 +58,25 @@ const getCalories = ({ startDate, endDate, interval = "days" }) =>
     interval
   );
 
-  /**
+/**
  * Get Weight and Height from google fit
  * @returns {*}
  */
 const getWeightAndHeight = () =>
 NativeModules.Fitness.getWeightAndHeight();
+
+/**
+ * Insert an activity into google fit
+ * @returns {*}
+ */
+   const submitWorkout = ({ name, workoutType, startTime, endTime, calories, distance }) =>
+   NativeModules.Fitness.submitWorkout(
+     name,
+     workoutType,
+     parseDate(startTime),
+     parseDate(endTime),
+     calories,
+     distance);
 
 /**
  * Get native getHeartRate with parsed Dates
@@ -117,5 +130,6 @@ export default {
   getCalories,
   getHeartRate,
   getSleepAnalysis,
-  getWeightAndHeight
+  getWeightAndHeight,
+  submitWorkout
 };

@@ -33,6 +33,7 @@ import com.google.android.gms.fitness.request.DataReadRequest;
 import com.google.android.gms.fitness.request.SessionReadRequest;
 import com.google.android.gms.fitness.result.DataReadResponse;
 import com.google.android.gms.fitness.result.SessionReadResponse;
+import com.google.android.gms.fitness.request.SessionInsertRequest;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -50,6 +51,7 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.UUID;
 
 import static com.ovalmoney.fitness.permission.Permissions.ACTIVITY;
 import static com.ovalmoney.fitness.permission.Permissions.CALORIES;
@@ -378,6 +380,82 @@ public class Manager implements ActivityEventListener {
         accessGoogleFit(context, promise);
 	}
 
+    public void submitWorkout(Context context, String name, String workoutType, double startTime, double endTime, float calories, float distance, final Promise promise) {
+
+        /*
+        * Distance Data source
+        */ 
+        DataSource distanceDataSource = new DataSource.Builder()
+                .setAppPackageName(context.getPackageName())
+                .setDataType(DataType.TYPE_DISTANCE_DELTA)
+                .setType(DataSource.TYPE_RAW).build();
+        DataSet distanceDataSet = DataSet.create(distanceDataSource);
+        DataPoint distanceDataPoint = DataPoint.create(distanceDataSource)
+                .setTimeInterval((long) startTime, (long) endTime, TimeUnit.MILLISECONDS);
+        distanceDataPoint.getValue(Field.FIELD_DISTANCE).setFloat(distance);
+        distanceDataSet.add(distanceDataPoint);
+
+        /*
+        * Calories Data source
+        */ 
+        DataSource caloriesDataSource = new DataSource.Builder()
+                .setAppPackageName(context.getPackageName())
+                .setDataType(DataType.TYPE_CALORIES_EXPENDED)
+                .setType(DataSource.TYPE_RAW).build();
+        DataSet caloriesDataSet = DataSet.create(caloriesDataSource);
+        DataPoint caloriesDataPoint = DataPoint.create(caloriesDataSource)
+                .setTimeInterval((long) startTime, (long) endTime, TimeUnit.MILLISECONDS);
+        caloriesDataPoint.getValue(Field.FIELD_CALORIES).setFloat(calories);
+        caloriesDataSet.add(caloriesDataPoint);
+
+        /*
+        * Activity data source
+        */
+        DataSource acSource = new DataSource.Builder()
+                .setAppPackageName(context.getPackageName())
+                .setDataType(DataType.TYPE_ACTIVITY_SEGMENT)
+                .setType(DataSource.TYPE_DERIVED).build();
+        DataSet dataSet = DataSet.create(acSource);
+        DataPoint dataPoint = DataPoint.create(acSource).setTimeInterval((long) startTime, (long) endTime, TimeUnit.MILLISECONDS);
+        dataPoint.getValue(Field.FIELD_ACTIVITY).setActivity(getActivityType(workoutType));
+        dataSet.add(dataPoint);
+
+        // Persist everything in google store
+        Session session = new Session.Builder()
+                .setName(name)
+                // .setActivity(getActivityType(workoutType))
+                .setActivity(FitnessActivities.CRICKET)
+                .setDescription("activity description")
+                .setIdentifier(UUID.randomUUID().toString())
+                .setStartTime((long) startTime, TimeUnit.MILLISECONDS)
+                .setEndTime((long) endTime, TimeUnit.MILLISECONDS)
+                .build();
+
+        SessionInsertRequest insertRequest = new SessionInsertRequest.Builder()
+                .setSession(session)
+                .addDataSet(caloriesDataSet)
+                .addDataSet(dataSet)
+                .addDataSet(distanceDataSet)
+                .build();
+
+            Fitness.getSessionsClient(context, GoogleSignIn.getLastSignedInAccount(context))
+                .insertSession(insertRequest)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    // At this point, the session has been inserted and can be read.
+                    Log.d("LOG_TAG", "onSuccess()");
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    promise.reject(e);
+                }
+            });
+
+        }
+
      public void getHeartRate(Context context, double startDate, double endDate, String customInterval,final Promise promise) {
         TimeUnit interval = getInterval(customInterval);
 
@@ -462,6 +540,27 @@ public class Manager implements ActivityEventListener {
                         promise.reject(e);
                     }
                 });
+    }
+
+    private String getActivityType(String workoutType) {
+        String activityType;
+
+        switch (workoutType) {
+            case "running":
+                activityType = FitnessActivities.RUNNING;
+                break;
+            case "rowing":
+                activityType = FitnessActivities.ROWING;
+                break;
+            case "cycling":
+                activityType = FitnessActivities.BIKING;
+                break;
+            default:
+                activityType = FitnessActivities.OTHER;
+                break;
+        }
+
+        return activityType;
     }
 
     private void accessGoogleFit(Context context, final Promise promise) {
