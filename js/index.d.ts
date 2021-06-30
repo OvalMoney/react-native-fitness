@@ -17,6 +17,8 @@ const PermissionKinds = {
   HeartRate: 3,
   Activity: 4,
   SleepAnalysis: 5,
+  Weight: 6,
+  Height: 7,
 } as const;
 
 export declare type PermissionKinds = typeof PermissionKinds[keyof typeof PermissionKinds];
@@ -130,12 +132,25 @@ export declare interface CaloriesRecord {
  * @return Promise<CalorieRecord[]>
  */
 export declare function getCalories(request: Request): Promise<CaloriesRecord[]>
+export declare interface WeightAndHeightRecord {
+  height: string
+  weight: string
+}
+
+/**
+ * Fetch user weight and height
+ * 
+ * @param request Request
+ * @return Promise<CalorieRecord[]>
+ */
+ export declare function getWeightAndHeight(): Promise<WeightAndHeightRecord[]>
 
 export declare interface HeartRateRecord {
   startDate: string
   endDate: string
   quantity: number
 }
+
 
 /**
  * Fetch heart rate bpm on a given period of time.

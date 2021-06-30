@@ -43,6 +43,7 @@ import com.ovalmoney.fitness.permission.Request;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -55,6 +56,8 @@ import static com.ovalmoney.fitness.permission.Permissions.DISTANCES;
 import static com.ovalmoney.fitness.permission.Permissions.STEPS;
 import static com.ovalmoney.fitness.permission.Permissions.HEART_RATE;
 import static com.ovalmoney.fitness.permission.Permissions.SLEEP_ANALYSIS;
+import static com.ovalmoney.fitness.permission.Permissions.WEIGHT;
+import static com.ovalmoney.fitness.permission.Permissions.HEIGHT;
 
 public class Manager implements ActivityEventListener {
 
@@ -107,6 +110,12 @@ public class Manager implements ActivityEventListener {
                     break;
                 case HEART_RATE:
                     fitnessOptions.addDataType(DataType.TYPE_HEART_RATE_BPM, currentRequest.permissionAccess);
+                    break;
+                case WEIGHT:
+                    fitnessOptions.addDataType(DataType.WEIGHT, currentRequest.permissionAccess);
+                    break;
+                case HEIGHT:
+                    fitnessOptions.addDataType(DataType.HEIGHT, currentRequest.permissionAccess);
                     break;
                 case SLEEP_ANALYSIS:
                 default:
@@ -356,6 +365,17 @@ public class Manager implements ActivityEventListener {
                     }
                 });
     }
+    
+
+
+    public void getWeightAndHeight(Context context, Promise promise) {
+        FitnessOptions fitnessOptions = FitnessOptions.builder()
+        .addDataType(DataType.TYPE_WEIGHT, FitnessOptions.ACCESS_READ)
+        .addDataType(DataType.TYPE_HEIGHT, FitnessOptions.ACCESS_READ)
+        .build();
+
+        accessGoogleFit(context, promise);
+	}
 
      public void getHeartRate(Context context, double startDate, double endDate, String customInterval,final Promise promise) {
         TimeUnit interval = getInterval(customInterval);
@@ -442,6 +462,62 @@ public class Manager implements ActivityEventListener {
                     }
                 });
     }
+
+    private void accessGoogleFit(Context context, final Promise promise) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		long endTime = cal.getTimeInMillis();
+
+		DataReadRequest readRequest = new DataReadRequest.Builder()
+        .read(DataType.TYPE_WEIGHT)
+        .read(DataType.TYPE_HEIGHT)
+        .setLimit(1)
+        .setTimeRange(1, (new Date().getTime()), TimeUnit.MILLISECONDS)
+        .build();
+
+		final GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(context);
+
+		Fitness.getHistoryClient(context, account)
+				.readData(readRequest)
+				.addOnSuccessListener(new OnSuccessListener<DataReadResponse>() {
+					@Override
+					public void onSuccess(DataReadResponse dataReadResponse) {
+						Log.d("LOG_TAG", "onSuccess()");
+
+						List<DataSet> dataSets = dataReadResponse.getDataSets();
+
+						WritableMap map = Arguments.createMap();
+
+						try {
+							for (DataSet ds : dataSets) {
+								for (DataPoint dp : ds.getDataPoints()) {
+									for (Field field : dp.getDataType().getFields()) {
+										map.putDouble(field.getName(), dp.getValue(field).asFloat());
+									}
+								}
+							}	
+						}
+						catch (Exception e) {
+							promise.reject(e.toString());
+						}
+						
+						promise.resolve(map);
+					}
+				})
+				.addOnFailureListener(new OnFailureListener() {
+					@Override
+					public void onFailure(@NonNull Exception e) {
+						Log.e("LOG_TAG", "onFailure()", e);
+						promise.reject(e.toString());
+					}
+				})
+				.addOnCompleteListener(new OnCompleteListener() {
+					@Override
+					public void onComplete(@NonNull Task task) {
+						Log.d("LOG_TAG", "onComplete()");
+					}
+				});
+	}
 
     private void processStep(DataSet dataSet, WritableArray map) {
 
