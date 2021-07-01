@@ -140,10 +140,9 @@ export declare interface WeightAndHeightRecord {
 /**
  * Fetch user weight and height
  * 
- * @param request Request
- * @return Promise<CalorieRecord[]>
+ * @return Promise<WeightAndHeightRecord[]>
  */
- export declare function getWeightAndHeight(): Promise<WeightAndHeightRecord[]>
+ export declare function getWeightAndHeight(): Promise<WeightAndHeightRecord>
 
  export declare interface SubmitWorkoutRequest {
   name: string,
