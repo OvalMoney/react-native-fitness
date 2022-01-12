@@ -1,5 +1,5 @@
 
-# react-native-fitness
+# react-native-fitness(fix crashes on Android by calling getHeartRate())
 `react-native-fitness` is a library that works on both `iOS` and `Android` with it you can interact with Apple Healthkit and Google Fit.
 Currently the lib provides a set of [API](#API) that you can use to read steps count or distance count for a given period of time.
 
